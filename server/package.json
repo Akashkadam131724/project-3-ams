@@ -1,0 +1,39 @@
+{
+  "name": "server",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "node --watch --env-file=.env index.js",
+    "seed:superadmin": "node --env-file=.env seed/superAdmin.seed.js",
+    "seed:dummy": "node --env-file=.env seed/dummyData.seed.js",
+    "seed:demo": "node --env-file=.env seed/demoUsers.seed.js",
+    "migrate:project-owner-role": "node --env-file=.env scripts/migrate-project-owner-role.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "module",
+  "dependencies": {
+    "@aws-sdk/client-s3": "^3.1091.0",
+    "bcrypt": "^6.0.0",
+    "cookie-parser": "^1.4.7",
+    "cors": "^2.8.6",
+    "express": "^5.2.1",
+    "jsonwebtoken": "^9.0.3",
+    "mime-types": "^3.0.1",
+    "mongoose": "^9.7.4",
+    "morgan": "^1.10.1",
+    "multer": "^2.0.2",
+    "swagger-ui-express": "^5.0.1",
+    "zod": "^4.4.3"
+  },
+  "devDependencies": {
+    "@types/cookie-parser": "^1.4.10",
+    "@types/jsonwebtoken": "^9.0.10",
+    "@types/mime-types": "^2.1.4",
+    "@types/morgan": "^1.9.10",
+    "@types/multer": "^2.0.0"
+  }
+}

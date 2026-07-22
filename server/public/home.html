@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>AMS — Home</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&family=Instrument+Serif:ital@0;1&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      :root {
+        --ink: #0f1c14;
+        --muted: #4a5c50;
+        --line: #c8d4cc;
+        --paper: #f3f6f2;
+        --accent: #1a6b45;
+        --accent-hover: #145536;
+        --danger: #9b2c2c;
+        --danger-hover: #7a2222;
+      }
+
+      * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+
+      body {
+        min-height: 100vh;
+        font-family: "DM Sans", sans-serif;
+        color: var(--ink);
+        background:
+          radial-gradient(ellipse 80% 60% at 10% 0%, #d8ebe0 0%, transparent 55%),
+          radial-gradient(ellipse 70% 50% at 100% 100%, #cfe0d6 0%, transparent 50%),
+          linear-gradient(165deg, #eef3ef 0%, #e2ebe5 45%, #d6e2da 100%);
+        padding: 2rem 1.5rem;
+      }
+
+      body.loading main {
+        opacity: 0;
+      }
+
+      .shell {
+        width: min(100%, 560px);
+        margin: 0 auto;
+        animation: rise 0.55s ease-out both;
+      }
+
+      @keyframes rise {
+        from {
+          opacity: 0;
+          transform: translateY(12px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      header {
+        display: flex;
+        align-items: baseline;
+        justify-content: space-between;
+        gap: 1rem;
+        margin-bottom: 2rem;
+      }
+
+      header h1 {
+        font-family: "Instrument Serif", Georgia, serif;
+        font-size: clamp(2.5rem, 7vw, 3.25rem);
+        font-weight: 400;
+        letter-spacing: -0.02em;
+        line-height: 1;
+      }
+
+      header p {
+        color: var(--muted);
+        font-size: 0.95rem;
+      }
+
+      .panel {
+        background: color-mix(in srgb, var(--paper) 88%, white);
+        border: 1px solid var(--line);
+        border-radius: 4px;
+        padding: 1.5rem;
+        backdrop-filter: blur(8px);
+      }
+
+      .panel h2 {
+        font-size: 0.75rem;
+        font-weight: 600;
+        letter-spacing: 0.06em;
+        text-transform: uppercase;
+        color: var(--muted);
+        margin-bottom: 1rem;
+      }
+
+      .user-grid {
+        display: grid;
+        gap: 0.85rem;
+      }
+
+      .row {
+        display: grid;
+        grid-template-columns: 7rem 1fr;
+        gap: 0.75rem;
+        align-items: baseline;
+      }
+
+      .row dt {
+        font-size: 0.8rem;
+        font-weight: 600;
+        color: var(--muted);
+        text-transform: uppercase;
+        letter-spacing: 0.03em;
+      }
+
+      .row dd {
+        font-size: 1rem;
+        word-break: break-word;
+      }
+
+      .badge {
+        display: inline-block;
+        font-size: 0.8rem;
+        font-weight: 600;
+        padding: 0.2rem 0.5rem;
+        border-radius: 3px;
+        background: color-mix(in srgb, var(--accent) 14%, white);
+        color: var(--accent);
+      }
+
+      .actions {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.75rem;
+        margin-top: 1.5rem;
+      }
+
+      .btn {
+        font: inherit;
+        font-size: 0.95rem;
+        font-weight: 600;
+        text-decoration: none;
+        border: none;
+        border-radius: 3px;
+        padding: 0.75rem 1rem;
+        cursor: pointer;
+        transition: background 0.15s ease, transform 0.12s ease;
+      }
+
+      .btn:active:not(:disabled) {
+        transform: translateY(1px);
+      }
+
+      .btn-primary {
+        color: #fff;
+        background: var(--accent);
+      }
+
+      .btn-primary:hover {
+        background: var(--accent-hover);
+      }
+
+      .btn-ghost {
+        color: var(--danger);
+        background: transparent;
+        border: 1px solid color-mix(in srgb, var(--danger) 35%, var(--line));
+      }
+
+      .btn-ghost:hover {
+        background: color-mix(in srgb, var(--danger) 8%, white);
+        border-color: var(--danger);
+      }
+
+      .btn:disabled {
+        opacity: 0.65;
+        cursor: wait;
+      }
+    </style>
+  </head>
+  <body class="loading">
+    <div class="shell">
+      <header>
+        <div>
+          <h1>AMS</h1>
+          <p>You’re signed in</p>
+        </div>
+      </header>
+
+      <main class="panel">
+        <h2>Account</h2>
+        <dl class="user-grid">
+          <div class="row">
+            <dt>Name</dt>
+            <dd id="user-name">—</dd>
+          </div>
+          <div class="row">
+            <dt>Email</dt>
+            <dd id="user-email">—</dd>
+          </div>
+          <div class="row">
+            <dt>Role</dt>
+            <dd id="user-role">—</dd>
+          </div>
+          <div class="row">
+            <dt>User ID</dt>
+            <dd id="user-id">—</dd>
+          </div>
+        </dl>
+
+        <div class="actions">
+          <a class="btn btn-primary" href="/api/docs" target="_blank" rel="noopener">
+            API Docs
+          </a>
+          <button type="button" class="btn btn-ghost" id="logout-btn">Log out</button>
+        </div>
+      </main>
+    </div>
+
+    <script>
+      const nameEl = document.getElementById("user-name");
+      const emailEl = document.getElementById("user-email");
+      const roleEl = document.getElementById("user-role");
+      const idEl = document.getElementById("user-id");
+      const logoutBtn = document.getElementById("logout-btn");
+
+      async function loadUser() {
+        try {
+          const res = await fetch("/api/v1/auth/me", { credentials: "include" });
+          if (!res.ok) {
+            window.location.replace("/login");
+            return;
+          }
+
+          const data = await res.json();
+          const user = data.user;
+          nameEl.textContent = user.name || "—";
+          emailEl.textContent = user.email || "—";
+          idEl.textContent = user._id || "—";
+          roleEl.innerHTML = user.isSuperAdmin
+            ? '<span class="badge">Super Admin</span>'
+            : "Member";
+          document.body.classList.remove("loading");
+        } catch {
+          window.location.replace("/login");
+        }
+      }
+
+      logoutBtn.addEventListener("click", async () => {
+        logoutBtn.disabled = true;
+        logoutBtn.textContent = "Logging out…";
+        try {
+          await fetch("/api/v1/auth/logout", {
+            method: "POST",
+            credentials: "include",
+          });
+        } finally {
+          window.location.replace("/login");
+        }
+      });
+
+      loadUser();
+    </script>
+  </body>
+</html>
