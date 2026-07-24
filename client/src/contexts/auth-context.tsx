@@ -1,0 +1,78 @@
+"use client";
+
+import {
+  createContext,
+  useCallback,
+  useContext,
+  useEffect,
+  useMemo,
+  useState,
+} from "react";
+import { useRouter } from "next/navigation";
+import { ApiError, authApi } from "@/lib/api";
+import type { User } from "@/lib/types";
+
+type AuthContextValue = {
+  user: User | null;
+  loading: boolean;
+  login: (email: string, password: string) => Promise<void>;
+  logout: () => Promise<void>;
+  refresh: () => Promise<void>;
+};
+
+const AuthContext = createContext<AuthContextValue | null>(null);
+
+export function AuthProvider({ children }: { children: React.ReactNode }) {
+  const router = useRouter();
+  const [user, setUser] = useState<User | null>(null);
+  const [loading, setLoading] = useState(true);
+
+  const refresh = useCallback(async () => {
+    try {
+      const { user: me } = await authApi.me();
+      setUser(me);
+    } catch (e) {
+      if (e instanceof ApiError && e.status === 401) {
+        setUser(null);
+      } else {
+        throw e;
+      }
+    }
+  }, []);
+
+  useEffect(() => {
+    refresh()
+      .catch(() => setUser(null))
+      .finally(() => setLoading(false));
+  }, [refresh]);
+
+  const login = useCallback(
+    async (email: string, password: string) => {
+      const { user: loggedIn } = await authApi.login(email, password);
+      setUser(loggedIn);
+      router.push("/projects");
+      router.refresh();
+    },
+    [router]
+  );
+
+  const logout = useCallback(async () => {
+    await authApi.logout();
+    setUser(null);
+    router.push("/login");
+    router.refresh();
+  }, [router]);
+
+  const value = useMemo(
+    () => ({ user, loading, login, logout, refresh }),
+    [user, loading, login, logout, refresh]
+  );
+
+  return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
+}
+
+export function useAuth() {
+  const ctx = useContext(AuthContext);
+  if (!ctx) throw new Error("useAuth must be used within AuthProvider");
+  return ctx;
+}
