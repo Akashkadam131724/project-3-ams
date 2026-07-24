@@ -2,23 +2,22 @@
 
 set -e
 
-echo "Deploying backend..."
+echo "=================================="
+echo "Deploying Backend..."
+echo "=================================="
 
-cd server
-
-echo "Current branch:"
-git branch --show-current
+cd "$(dirname "$0")/server"
 
 echo "Pulling latest code..."
-git pull
+git pull origin main
 
-echo "Installing packages..."
+echo "Installing dependencies..."
 npm install
 
-echo "Restarting application..."
+echo "Restarting PM2..."
 pm2 restart ams-api
 
-echo "PM2 Status:"
+echo "Checking PM2 status..."
 pm2 list
 
-echo "Deployment complete!"
+echo "Deployment Successful!"
