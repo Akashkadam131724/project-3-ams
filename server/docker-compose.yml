@@ -5,4 +5,4 @@ services:
       - "3004:3004"
     env_file:
       - .env
-    restart: unless-stoppedc
+    restart: unless-stopped
