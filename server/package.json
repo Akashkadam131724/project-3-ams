@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node --env-file=.env index.js",
+    "start": "node index.js",
     "dev": "node --watch --env-file=.env index.js",
     "seed:superadmin": "node --env-file=.env seed/superAdmin.seed.js",
     "seed:dummy": "node --env-file=.env seed/dummyData.seed.js",
