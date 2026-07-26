@@ -15,8 +15,7 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 dotenv.config();
- 
-destory the code
+
 
 connectDB();
 
@@ -39,6 +38,17 @@ setupSwagger(app);
 
 app.get("/", (_req, res) => {
   res.sendFile(path.join(__dirname, "public", "home.html"));
+});
+
+app.get("/health", (_req, res) => {
+  res.status(200).json({
+    status: "UP",
+    service: "server-api",
+    version: process.env.IMAGE_TAG || "development",
+    environment: process.env.NODE_ENV || "development",
+    uptime: Math.floor(process.uptime()),
+    timestamp: new Date().toISOString(),
+  });
 });
 
 app.get("/login", (_req, res) => {
