@@ -1,0 +1,27 @@
+name: Deploy Backend
+
+on:
+  workflow_dispatch:
+    inputs:
+      image_tag:
+        description: "Docker image tag"
+        required: true
+        default: "latest"
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Deploy to EC2
+        uses: appleboy/ssh-action@v1.2.0
+        with:
+          host: ${{ secrets.EC2_HOST }}
+          username: ${{ secrets.EC2_USERNAME }}
+          key: ${{ secrets.EC2_SSH_KEY }}
+          script: |
+            cd ~/project-3-ams
+
+            IMAGE_TAG=${{ github.event.inputs.image_tag }}
+
+            IMAGE_TAG=$IMAGE_TAG ./deploy-backend-docker.sh
