@@ -1,5 +1,6 @@
 services:
   api:
+    build: .
     image: akash131/server-api:latest
     ports:
       - "3004:3004"

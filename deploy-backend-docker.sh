@@ -11,11 +11,14 @@ cd "$(dirname "$0")/server"
 echo "Pulling latest code..."
 git pull origin main
 
-echo "Pulling latest Docker image..."
-docker compose pull
+echo "Building Docker image..."
+docker compose build
 
 echo "Starting containers..."
 docker compose up -d
+
+echo "Pushing image to Docker Hub..."
+docker push akash131/server-api:latest
 
 echo "Removing unused Docker images..."
 docker image prune -f
