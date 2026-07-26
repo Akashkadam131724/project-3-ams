@@ -3,6 +3,7 @@
 set -e
 
 IMAGE_TAG=${IMAGE_TAG:-latest}
+HEALTH_ENDPOINT="/health"
 
 echo ""
 echo "========================================"
@@ -16,6 +17,13 @@ cd "$(dirname "$0")/server"
 echo "📥 Pulling latest code..."
 git pull origin main
 
+# Load environment variables from .env
+set -a
+source .env
+set +a
+
+APP_PORT=${PORT}
+
 echo ""
 echo "📦 Pulling Docker image..."
 IMAGE_TAG=$IMAGE_TAG docker compose pull
@@ -25,17 +33,17 @@ echo "🔄 Restarting containers..."
 IMAGE_TAG=$IMAGE_TAG docker compose up -d
 
 echo ""
-echo "⏳ Waiting for application..."
+echo "⏳ Waiting for application to start..."
 sleep 5
 
 echo ""
 echo "❤️ Running health check..."
 
-if curl --silent --fail http://localhost:3004/health >/tmp/health.json; then
+if HEALTH_RESPONSE=$(curl --silent --fail "http://localhost:${APP_PORT}${HEALTH_ENDPOINT}"); then
 
     echo ""
     echo "✅ Health Check Passed"
-    cat /tmp/health.json
+    echo "$HEALTH_RESPONSE"
 
 else
 
@@ -43,18 +51,19 @@ else
     echo "❌ Health Check Failed"
     echo ""
 
-    echo "Container Status"
+    echo "📋 Container Status"
     docker compose ps
 
     echo ""
-    echo "Container Logs"
+    echo "📜 Last 100 Container Logs"
     docker compose logs --tail=100 api
 
     exit 1
+
 fi
 
 echo ""
-echo "🧹 Cleaning unused images..."
+echo "🧹 Cleaning unused Docker images..."
 docker image prune -f
 
 echo ""
@@ -65,6 +74,6 @@ echo ""
 echo "========================================"
 echo "✅ Deployment Successful"
 echo "========================================"
-echo "Image : akash131/server-api:$IMAGE_TAG"
-echo "Health: http://localhost:3004/health"
+echo "Image      : akash131/server-api:$IMAGE_TAG"
+echo "Health URL : http://localhost:${APP_PORT}${HEALTH_ENDPOINT}"
 echo "========================================"
