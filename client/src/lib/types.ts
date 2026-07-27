@@ -84,3 +84,16 @@ export type ApiErrorBody = {
   message?: string;
   errors?: Record<string, string[]>;
 };
+
+export type ResourceListPagination = {
+  page: number;
+  pageSize: number;
+  total: number;
+  totalPages: number;
+  hasMore: boolean;
+};
+
+export type ResourceListSort = {
+  sortBy: string;
+  sortOrder: "asc" | "desc";
+};

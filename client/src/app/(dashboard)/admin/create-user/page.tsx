@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { useState } from "react";
 import { ApiError, usersApi } from "@/lib/api";
+import { PasswordInput } from "@/components/password-input";
 
 export default function CreateUserPage() {
   const [name, setName] = useState("");
@@ -100,15 +101,15 @@ export default function CreateUserPage() {
           <label htmlFor="password" className="block text-sm font-medium">
             Password
           </label>
-          <input
-            id="password"
-            type="password"
-            required
-            autoComplete="new-password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            className="mt-1 w-full rounded-md border border-zinc-300 px-3 py-2 text-sm"
-          />
+          <div className="mt-1">
+            <PasswordInput
+              id="password"
+              required
+              autoComplete="new-password"
+              value={password}
+              onChange={setPassword}
+            />
+          </div>
           <p className="mt-1 text-xs text-zinc-500">
             Min 8 chars, upper & lower case, number, special character, no
             spaces.

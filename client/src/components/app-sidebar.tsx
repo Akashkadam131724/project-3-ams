@@ -5,21 +5,29 @@ import { usePathname } from "next/navigation";
 import { useAuth } from "@/contexts/auth-context";
 import { adminNav, mainNav } from "@/lib/navigation";
 import { projectPath } from "@/lib/paths";
-import { canViewActivity, rolesActorCanAssign } from "@/lib/roles";
-import { useEffect, useState } from "react";
-import { projectsApi } from "@/lib/api";
-import type { ProjectRole } from "@/lib/types";
+import { useProjectAccess } from "@/hooks/use-project-access";
+import {
+  iconForNavHref,
+  NavIconLogout,
+} from "@/components/sidebar-nav-icons";
+import { useEffect, useState, type ReactNode } from "react";
 
 function NavLink({
   href,
   label,
   matchPrefix,
   membersSection,
+  onNavigate,
+  collapsed,
+  icon,
 }: {
   href: string;
   label: string;
   matchPrefix?: boolean;
   membersSection?: boolean;
+  onNavigate?: () => void;
+  collapsed: boolean;
+  icon: ReactNode;
 }) {
   const pathname = usePathname();
   let active = false;
@@ -28,8 +36,7 @@ function NavLink({
   } else if (membersSection) {
     active =
       pathname === href ||
-      (pathname.startsWith(`${href}/`) &&
-        !pathname.endsWith("/activity"));
+      (pathname.startsWith(`${href}/`) && !pathname.endsWith("/activity"));
   } else if (matchPrefix) {
     active =
       pathname === href ||
@@ -43,100 +50,205 @@ function NavLink({
   return (
     <Link
       href={href}
-      className={`block rounded-md px-3 py-2 text-sm ${
+      onClick={() => onNavigate?.()}
+      title={collapsed ? label : undefined}
+      className={`flex items-center rounded-md text-sm ${
+        collapsed ? "justify-center p-2.5" : "gap-3 px-3 py-2"
+      } ${
         active
           ? "bg-zinc-900 font-medium text-white"
           : "text-zinc-700 hover:bg-zinc-100"
       }`}
     >
-      {label}
+      <span className="shrink-0 [&_svg]:h-5 [&_svg]:w-5">{icon}</span>
+      {!collapsed && <span className="truncate">{label}</span>}
     </Link>
   );
 }
 
-export function AppSidebar() {
+function SidebarToggleIcon({ collapsed }: { collapsed: boolean }) {
+  return (
+    <svg
+      viewBox="0 0 24 24"
+      className="h-5 w-5"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2"
+      aria-hidden
+    >
+      {collapsed ? (
+        <path d="m9 6 6 6-6 6" />
+      ) : (
+        <path d="m15 6-6 6 6 6" />
+      )}
+    </svg>
+  );
+}
+
+export function AppSidebar({
+  mobileOpen = false,
+  onNavigate,
+  collapsed = false,
+  onToggleCollapse,
+}: {
+  mobileOpen?: boolean;
+  onNavigate?: () => void;
+  collapsed?: boolean;
+  onToggleCollapse?: () => void;
+}) {
   const pathname = usePathname();
   const { user, logout } = useAuth();
   const [projectId, setProjectId] = useState<string | null>(null);
-  const [projectName, setProjectName] = useState<string | null>(null);
-  const [myRole, setMyRole] = useState<ProjectRole | null>(null);
 
   useEffect(() => {
     const match = pathname.match(/^\/projects\/([a-f\d]{24})/i);
-    const id = match?.[1] ?? null;
-    setProjectId(id);
-    if (!id) {
-      setProjectName(null);
-      setMyRole(null);
-      return;
-    }
-    projectsApi
-      .get(id)
-      .then((res) => {
-        setProjectName(res.project.name);
-        setMyRole(res.role ?? null);
-      })
-      .catch(() => {
-        setProjectName(null);
-        setMyRole(null);
-      });
+    setProjectId(match?.[1] ?? null);
   }, [pathname]);
 
-  const canManageMembers =
-    user?.isSuperAdmin || rolesActorCanAssign(false, myRole).length > 0;
-  const showActivity =
-    user?.isSuperAdmin || canViewActivity(false, myRole);
+  const access = useProjectAccess(projectId);
+  const initials = user?.name
+    ?.split(/\s+/)
+    .map((p) => p[0])
+    .join("")
+    .slice(0, 2)
+    .toUpperCase();
 
   return (
-    <aside className="flex w-60 shrink-0 flex-col border-r border-zinc-200 bg-white">
-      <div className="border-b border-zinc-200 px-4 py-4">
-        <Link href="/projects" className="text-lg font-semibold text-zinc-900">
-          AMS
+    <aside
+      id="app-sidebar"
+      className={`fixed inset-y-0 left-0 z-50 flex h-dvh flex-col border-r border-zinc-200 bg-white shadow-xl transition-[width,transform] duration-200 ease-out lg:relative lg:z-auto lg:shrink-0 lg:translate-x-0 lg:shadow-none ${
+        mobileOpen ? "translate-x-0" : "-translate-x-full lg:translate-x-0"
+      } ${
+        collapsed
+          ? "w-[min(17rem,calc(100vw-2rem))] lg:w-16"
+          : "w-[min(17rem,calc(100vw-2rem))] lg:w-60"
+      }`}
+    >
+      <div
+        className={`flex shrink-0 items-center border-b border-zinc-200 ${
+          collapsed ? "justify-center px-2 py-3" : "justify-between px-4 py-4"
+        }`}
+      >
+        <Link
+          href="/projects"
+          onClick={() => onNavigate?.()}
+          className={`font-semibold text-zinc-900 ${collapsed ? "text-sm" : "text-lg"}`}
+          title={collapsed ? "AMS" : undefined}
+        >
+          {collapsed ? "A" : "AMS"}
         </Link>
+        {!collapsed && onToggleCollapse && (
+          <button
+            type="button"
+            onClick={onToggleCollapse}
+            className="hidden rounded-md p-1.5 text-zinc-600 hover:bg-zinc-100 lg:inline-flex"
+            aria-label="Collapse sidebar"
+          >
+            <SidebarToggleIcon collapsed={false} />
+          </button>
+        )}
       </div>
 
-      <nav className="flex-1 space-y-6 overflow-y-auto p-3">
+      {collapsed && onToggleCollapse && (
+        <button
+          type="button"
+          onClick={onToggleCollapse}
+          className="mx-auto mb-1 hidden shrink-0 rounded-md p-1.5 text-zinc-600 hover:bg-zinc-100 lg:flex"
+          aria-label="Expand sidebar"
+        >
+          <SidebarToggleIcon collapsed />
+        </button>
+      )}
+
+      <nav className="min-h-0 flex-1 space-y-6 overflow-y-auto p-2 lg:p-3">
         <div>
-          <p className="mb-2 px-3 text-xs font-medium uppercase tracking-wide text-zinc-400">
-            Workspace
-          </p>
+          {!collapsed && (
+            <p className="mb-2 px-3 text-xs font-medium uppercase tracking-wide text-zinc-400">
+              Workspace
+            </p>
+          )}
           <div className="space-y-0.5">
-            {mainNav.map((item) => (
-              <NavLink key={item.href} href={item.href} label={item.label} />
-            ))}
+            {mainNav.map((item) => {
+              const Icon = iconForNavHref(item.href);
+              return (
+                <NavLink
+                  key={item.href}
+                  href={item.href}
+                  label={item.label}
+                  collapsed={collapsed}
+                  onNavigate={onNavigate}
+                  icon={<Icon />}
+                />
+              );
+            })}
           </div>
         </div>
 
-        {projectId && projectName && (
+        {projectId && access.projectName && (
           <div>
-            <p className="mb-2 px-3 text-xs font-medium uppercase tracking-wide text-zinc-400">
-              {projectName}
-            </p>
+            {!collapsed && (
+              <p
+                className="mb-2 truncate px-3 text-xs font-medium uppercase tracking-wide text-zinc-400"
+                title={access.projectName}
+              >
+                {access.projectName}
+              </p>
+            )}
             <div className="space-y-0.5">
               <NavLink
                 href={projectPath(projectId)}
                 label="Files & folders"
                 matchPrefix
+                collapsed={collapsed}
+                onNavigate={onNavigate}
+                icon={(() => {
+                  const I = iconForNavHref(projectPath(projectId));
+                  return <I />;
+                })()}
               />
-              {canManageMembers && (
+              {access.canManageMembers && (
                 <>
                   <NavLink
                     href={`/projects/${projectId}/members`}
                     label="Members"
                     membersSection
+                    collapsed={collapsed}
+                    onNavigate={onNavigate}
+                    icon={(() => {
+                      const I = iconForNavHref(
+                        `/projects/${projectId}/members`
+                      );
+                      return <I />;
+                    })()}
                   />
-                  {showActivity && (
+                  {access.canViewActivity && (
                     <NavLink
                       href={`/projects/${projectId}/members/activity`}
                       label="Member activity"
+                      collapsed={collapsed}
+                      onNavigate={onNavigate}
+                      icon={(() => {
+                        const I = iconForNavHref(
+                          `/projects/${projectId}/members/activity`
+                        );
+                        return <I />;
+                      })()}
                     />
                   )}
                 </>
               )}
-              {showActivity && (
+              {access.canViewActivity && (
                 <NavLink
                   href={`/projects/${projectId}/activity`}
                   label="File activity"
+                  collapsed={collapsed}
+                  onNavigate={onNavigate}
+                  icon={(() => {
+                    const I = iconForNavHref(
+                      `/projects/${projectId}/activity`
+                    );
+                    return <I />;
+                  })()}
                 />
               )}
             </div>
@@ -145,34 +257,72 @@ export function AppSidebar() {
 
         {user?.isSuperAdmin && (
           <div>
-            <p className="mb-2 px-3 text-xs font-medium uppercase tracking-wide text-zinc-400">
-              Super admin
-            </p>
+            {!collapsed && (
+              <p className="mb-2 px-3 text-xs font-medium uppercase tracking-wide text-zinc-400">
+                Super admin
+              </p>
+            )}
             <div className="space-y-0.5">
-              {adminNav.map((item) => (
-                <NavLink key={item.href} href={item.href} label={item.label} />
-              ))}
+              {adminNav.map((item) => {
+                const Icon = iconForNavHref(item.href);
+                return (
+                  <NavLink
+                    key={item.href}
+                    href={item.href}
+                    label={item.label}
+                    collapsed={collapsed}
+                    onNavigate={onNavigate}
+                    icon={<Icon />}
+                  />
+                );
+              })}
             </div>
           </div>
         )}
       </nav>
 
       {user && (
-        <div className="border-t border-zinc-200 p-4">
-          <p className="truncate text-sm font-medium text-zinc-900">
-            {user.name}
-          </p>
-          <p className="truncate text-xs text-zinc-500">{user.email}</p>
-          {user.isSuperAdmin && (
-            <p className="mt-0.5 text-xs text-zinc-500">Super admin</p>
+        <div
+          className={`shrink-0 border-t border-zinc-200 ${
+            collapsed ? "p-2" : "p-4"
+          }`}
+        >
+          {collapsed ? (
+            <div className="flex flex-col items-center gap-2">
+              <div
+                className="flex h-9 w-9 items-center justify-center rounded-full bg-zinc-200 text-xs font-semibold text-zinc-700"
+                title={user.name}
+              >
+                {initials || "?"}
+              </div>
+              <button
+                type="button"
+                onClick={() => logout()}
+                className="rounded-md p-2 text-zinc-600 hover:bg-zinc-100"
+                title="Log out"
+                aria-label="Log out"
+              >
+                <NavIconLogout className="h-5 w-5" />
+              </button>
+            </div>
+          ) : (
+            <>
+              <p className="truncate text-sm font-medium text-zinc-900">
+                {user.name}
+              </p>
+              <p className="truncate text-xs text-zinc-500">{user.email}</p>
+              {user.isSuperAdmin && (
+                <p className="mt-0.5 text-xs text-zinc-500">Super admin</p>
+              )}
+              <button
+                type="button"
+                onClick={() => logout()}
+                className="mt-3 w-full rounded-md border border-zinc-300 px-3 py-1.5 text-sm text-zinc-700 hover:bg-zinc-50"
+              >
+                Log out
+              </button>
+            </>
           )}
-          <button
-            type="button"
-            onClick={() => logout()}
-            className="mt-3 w-full rounded-md border border-zinc-300 px-3 py-1.5 text-sm text-zinc-700 hover:bg-zinc-50"
-          >
-            Log out
-          </button>
         </div>
       )}
     </aside>

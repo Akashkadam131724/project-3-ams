@@ -4,7 +4,8 @@ import Link from "next/link";
 import { useParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import { ApiError, membersApi, projectsApi } from "@/lib/api";
-import { ROLE_LABELS, rolesActorCanAssign, canViewActivity, isProjectOwnerRole } from "@/lib/roles";
+import { ROLE_LABELS, rolesActorCanAssign, isProjectOwnerRole } from "@/lib/roles";
+import { useProjectAccess } from "@/hooks/use-project-access";
 import { useAuth } from "@/contexts/auth-context";
 import type { ProjectMemberRow, ProjectRole } from "@/lib/types";
 
@@ -29,6 +30,8 @@ export default function ProjectMembersPage() {
     myRole
   );
   const canManage = assignable.length > 0;
+  const projectAccess = useProjectAccess(projectId);
+  const showMemberActivity = projectAccess.canViewActivity;
 
   const loadCandidates = () => {
     if (!canManage) return;
@@ -75,9 +78,6 @@ export default function ProjectMembersPage() {
       setRole(assignable[0]);
     }
   }, [assignable, role]);
-
-  const showMemberActivity =
-    Boolean(user?.isSuperAdmin) || canViewActivity(false, myRole);
 
   const onAdd = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -155,7 +155,7 @@ export default function ProjectMembersPage() {
               required
               value={userId}
               onChange={(e) => setUserId(e.target.value)}
-              className="mt-1 w-72 max-w-full rounded-md border border-zinc-300 px-3 py-2 text-sm"
+              className="mt-1 w-full min-w-0 rounded-md border border-zinc-300 px-3 py-2 text-sm sm:w-72"
             >
               <option value="" disabled>
                 {candidates.length === 0
@@ -198,42 +198,70 @@ export default function ProjectMembersPage() {
       {loading ? (
         <p className="mt-8 text-zinc-500">Loading…</p>
       ) : (
-        <table className="mt-8 w-full text-left text-sm">
-          <thead>
-            <tr className="border-b border-zinc-200 text-zinc-500">
-              <th className="py-2 font-medium">User</th>
-              <th className="py-2 font-medium">Role</th>
-              {canManage && <th className="py-2 font-medium" />}
-            </tr>
-          </thead>
-          <tbody>
+        <>
+          <ul className="mt-8 space-y-3 md:hidden">
             {members.map((m) => (
-              <tr key={m._id} className="border-b border-zinc-100">
-                <td className="py-3">
-                  {m.user.name}
-                  <span className="ml-2 text-zinc-500">{m.user.email}</span>
-                </td>
-                <td className="py-3">{ROLE_LABELS[m.role]}</td>
-                {canManage && (
-                  <td className="py-3 text-right">
-                    {(!isProjectOwnerRole(m.role) ||
-                      user?.isSuperAdmin) && (
-                      <button
-                        type="button"
-                        onClick={() => onRemove(m)}
-                        className="text-red-600 hover:underline"
-                      >
-                        {isProjectOwnerRole(m.role)
-                          ? "Remove owner"
-                          : "Remove"}
-                      </button>
-                    )}
-                  </td>
-                )}
-              </tr>
+              <li
+                key={m._id}
+                className="rounded-lg border border-zinc-200 bg-white p-4 text-sm"
+              >
+                <p className="font-medium text-zinc-900">{m.user.name}</p>
+                <p className="truncate text-zinc-500">{m.user.email}</p>
+                <p className="mt-2 text-zinc-700">{ROLE_LABELS[m.role]}</p>
+                {canManage &&
+                  (!isProjectOwnerRole(m.role) || user?.isSuperAdmin) && (
+                    <button
+                      type="button"
+                      onClick={() => onRemove(m)}
+                      className="mt-3 text-red-600 hover:underline"
+                    >
+                      {isProjectOwnerRole(m.role)
+                        ? "Remove owner"
+                        : "Remove"}
+                    </button>
+                  )}
+              </li>
             ))}
-          </tbody>
-        </table>
+          </ul>
+          <div className="-mx-4 hidden overflow-x-auto px-4 md:mx-0 md:block md:px-0">
+            <table className="mt-8 w-full min-w-[36rem] text-left text-sm">
+              <thead>
+                <tr className="border-b border-zinc-200 text-zinc-500">
+                  <th className="py-2 font-medium">User</th>
+                  <th className="py-2 font-medium">Role</th>
+                  {canManage && <th className="py-2 font-medium" />}
+                </tr>
+              </thead>
+              <tbody>
+                {members.map((m) => (
+                  <tr key={m._id} className="border-b border-zinc-100">
+                    <td className="py-3">
+                      <span className="block font-medium">{m.user.name}</span>
+                      <span className="text-zinc-500">{m.user.email}</span>
+                    </td>
+                    <td className="py-3">{ROLE_LABELS[m.role]}</td>
+                    {canManage && (
+                      <td className="py-3 text-right">
+                        {(!isProjectOwnerRole(m.role) ||
+                          user?.isSuperAdmin) && (
+                          <button
+                            type="button"
+                            onClick={() => onRemove(m)}
+                            className="text-red-600 hover:underline"
+                          >
+                            {isProjectOwnerRole(m.role)
+                              ? "Remove owner"
+                              : "Remove"}
+                          </button>
+                        )}
+                      </td>
+                    )}
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </>
       )}
     </>
   );

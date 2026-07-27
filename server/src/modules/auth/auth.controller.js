@@ -6,6 +6,39 @@ import {
   clearAccessTokenCookie,
 } from "./jwt.helper.js";
 
+const bootstrapSuperAdmin = async (req, res, next) => {
+  try {
+    const userCount = await User.countDocuments();
+    if (userCount > 0) {
+      return next(
+        new ForbiddenError(
+          "Bootstrap is only available when the database has no users. Log in or run npm run seed:superadmin."
+        )
+      );
+    }
+
+    const { name, email, password } = req.body;
+    const user = await User.create({
+      name,
+      email,
+      password,
+      isSuperAdmin: true,
+    });
+
+    res.status(201).json({
+      message: "Super admin created. You can log in now.",
+      user: {
+        _id: user._id,
+        name: user.name,
+        email: user.email,
+        isSuperAdmin: user.isSuperAdmin,
+      },
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
 const login = async (req, res, next) => {
   try {
     const { email, password } = req.body;
@@ -63,4 +96,4 @@ const me = async (req, res, next) => {
   }
 };
 
-export { login, logout, me };
+export { login, logout, me, bootstrapSuperAdmin };

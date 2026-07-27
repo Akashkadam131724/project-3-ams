@@ -1,9 +1,13 @@
 import mongoose from "mongoose";
 
 const { connect } = mongoose;
-console.log(process.env.MONGO_URI, "process.env.MONGO_URI------------")
+
 const connectDB = async () => {
   try {
+    if (!process.env.MONGO_URI) {
+      console.error("MONGO_URI is missing. Check your .env file.");
+      process.exit(1);
+    }
     await connect(process.env.MONGO_URI);
     console.log("Connected to MongoDB");
   } catch (error) {

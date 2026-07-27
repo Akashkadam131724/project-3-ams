@@ -16,6 +16,46 @@ export const resourcePaths = {
             "Folder _id: return resources with this parent. Omit for project root.",
           schema: { type: "string" },
         },
+        {
+          name: "q",
+          in: "query",
+          required: false,
+          description: "Case-insensitive search on resource name",
+          schema: { type: "string" },
+        },
+        {
+          name: "type",
+          in: "query",
+          schema: { type: "string", enum: ["all", "folder", "file"] },
+        },
+        {
+          name: "sortBy",
+          in: "query",
+          description: "Sort field (default: name)",
+          schema: {
+            type: "string",
+            enum: ["name", "type", "modified", "created", "size", "creator"],
+            default: "name",
+          },
+        },
+        {
+          name: "sortOrder",
+          in: "query",
+          description: "Sort direction for any sortBy value (default: asc)",
+          schema: { type: "string", enum: ["asc", "desc"], default: "asc" },
+        },
+        {
+          name: "page",
+          in: "query",
+          description: "Page number (default: 1)",
+          schema: { type: "integer", minimum: 1, default: 1 },
+        },
+        {
+          name: "pageSize",
+          in: "query",
+          description: "Items per page (default: 10, max: 100)",
+          schema: { type: "integer", minimum: 1, maximum: 100, default: 10 },
+        },
       ],
       responses: {
         200: {
@@ -28,6 +68,33 @@ export const resourcePaths = {
                   resources: {
                     type: "array",
                     items: { $ref: "#/components/schemas/Resource" },
+                  },
+                  sort: {
+                    type: "object",
+                    properties: {
+                      sortBy: {
+                        type: "string",
+                        enum: [
+                          "name",
+                          "type",
+                          "modified",
+                          "created",
+                          "size",
+                          "creator",
+                        ],
+                      },
+                      sortOrder: { type: "string", enum: ["asc", "desc"] },
+                    },
+                  },
+                  pagination: {
+                    type: "object",
+                    properties: {
+                      page: { type: "integer" },
+                      pageSize: { type: "integer" },
+                      total: { type: "integer" },
+                      totalPages: { type: "integer" },
+                      hasMore: { type: "boolean" },
+                    },
                   },
                 },
               },
