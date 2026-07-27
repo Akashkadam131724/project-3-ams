@@ -56,8 +56,8 @@ function NavLink({
         collapsed ? "justify-center p-2.5" : "gap-3 px-3 py-2"
       } ${
         active
-          ? "bg-zinc-900 font-medium text-white"
-          : "text-zinc-700 hover:bg-zinc-100"
+          ? "ams-nav-active"
+          : "text-zinc-700 hover:bg-emerald-50 hover:text-emerald-900"
       }`}
     >
       <span className="shrink-0 [&_svg]:h-5 [&_svg]:w-5">{icon}</span>
@@ -116,7 +116,7 @@ export function AppSidebar({
   return (
     <aside
       id="app-sidebar"
-      className={`fixed inset-y-0 left-0 z-50 flex h-dvh flex-col border-r border-zinc-200 bg-white shadow-xl transition-[width,transform] duration-200 ease-out lg:relative lg:z-auto lg:shrink-0 lg:translate-x-0 lg:shadow-none ${
+      className={`fixed inset-y-0 left-0 z-50 flex h-dvh flex-col border-r border-emerald-200/60 bg-white shadow-xl transition-[width,transform] duration-200 ease-out lg:relative lg:z-auto lg:shrink-0 lg:translate-x-0 lg:shadow-none ${
         mobileOpen ? "translate-x-0" : "-translate-x-full lg:translate-x-0"
       } ${
         collapsed
@@ -125,14 +125,14 @@ export function AppSidebar({
       }`}
     >
       <div
-        className={`flex shrink-0 items-center border-b border-zinc-200 ${
+        className={`flex shrink-0 items-center border-b border-emerald-200/60 ${
           collapsed ? "justify-center px-2 py-3" : "justify-between px-4 py-4"
         }`}
       >
         <Link
           href="/projects"
           onClick={() => onNavigate?.()}
-          className={`font-semibold text-zinc-900 ${collapsed ? "text-sm" : "text-lg"}`}
+          className={`font-semibold text-emerald-900 ${collapsed ? "text-sm" : "text-lg"}`}
           title={collapsed ? "AMS" : undefined}
         >
           {collapsed ? "A" : "AMS"}
@@ -141,7 +141,7 @@ export function AppSidebar({
           <button
             type="button"
             onClick={onToggleCollapse}
-            className="hidden rounded-md p-1.5 text-zinc-600 hover:bg-zinc-100 lg:inline-flex"
+            className="hidden rounded-md p-1.5 text-emerald-800/80 hover:bg-emerald-50 lg:inline-flex"
             aria-label="Collapse sidebar"
           >
             <SidebarToggleIcon collapsed={false} />
@@ -153,7 +153,7 @@ export function AppSidebar({
         <button
           type="button"
           onClick={onToggleCollapse}
-          className="mx-auto mb-1 hidden shrink-0 rounded-md p-1.5 text-zinc-600 hover:bg-zinc-100 lg:flex"
+          className="mx-auto mb-1 hidden shrink-0 rounded-md p-1.5 text-emerald-800/80 hover:bg-emerald-50 lg:flex"
           aria-label="Expand sidebar"
         >
           <SidebarToggleIcon collapsed />
@@ -163,7 +163,7 @@ export function AppSidebar({
       <nav className="min-h-0 flex-1 space-y-6 overflow-y-auto p-2 lg:p-3">
         <div>
           {!collapsed && (
-            <p className="mb-2 px-3 text-xs font-medium uppercase tracking-wide text-zinc-400">
+            <p className="mb-2 px-3 text-xs font-medium uppercase tracking-wide text-emerald-800/45">
               Workspace
             </p>
           )}
@@ -188,7 +188,7 @@ export function AppSidebar({
           <div>
             {!collapsed && (
               <p
-                className="mb-2 truncate px-3 text-xs font-medium uppercase tracking-wide text-zinc-400"
+                className="mb-2 truncate px-3 text-xs font-medium uppercase tracking-wide text-emerald-800/45"
                 title={access.projectName}
               >
                 {access.projectName}
@@ -258,7 +258,7 @@ export function AppSidebar({
         {user?.isSuperAdmin && (
           <div>
             {!collapsed && (
-              <p className="mb-2 px-3 text-xs font-medium uppercase tracking-wide text-zinc-400">
+              <p className="mb-2 px-3 text-xs font-medium uppercase tracking-wide text-emerald-800/45">
                 Super admin
               </p>
             )}
@@ -283,14 +283,14 @@ export function AppSidebar({
 
       {user && (
         <div
-          className={`shrink-0 border-t border-zinc-200 ${
+          className={`shrink-0 border-t border-emerald-200/60 ${
             collapsed ? "p-2" : "p-4"
           }`}
         >
           {collapsed ? (
             <div className="flex flex-col items-center gap-2">
               <div
-                className="flex h-9 w-9 items-center justify-center rounded-full bg-zinc-200 text-xs font-semibold text-zinc-700"
+                className="flex h-9 w-9 items-center justify-center rounded-full bg-emerald-100 text-xs font-semibold text-emerald-900"
                 title={user.name}
               >
                 {initials || "?"}
@@ -298,7 +298,7 @@ export function AppSidebar({
               <button
                 type="button"
                 onClick={() => logout()}
-                className="rounded-md p-2 text-zinc-600 hover:bg-zinc-100"
+                className="rounded-md p-2 text-emerald-800/80 hover:bg-emerald-50"
                 title="Log out"
                 aria-label="Log out"
               >
@@ -317,7 +317,7 @@ export function AppSidebar({
               <button
                 type="button"
                 onClick={() => logout()}
-                className="mt-3 w-full rounded-md border border-zinc-300 px-3 py-1.5 text-sm text-zinc-700 hover:bg-zinc-50"
+                className="mt-3 w-full rounded-md border border-emerald-200/80 px-3 py-1.5 text-sm text-emerald-900 hover:bg-emerald-50"
               >
                 Log out
               </button>

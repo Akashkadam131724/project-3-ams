@@ -78,7 +78,7 @@ export default function CreateUserPage() {
             required
             value={name}
             onChange={(e) => setName(e.target.value)}
-            className="mt-1 w-full rounded-md border border-zinc-300 px-3 py-2 text-sm"
+            className="ams-input mt-1"
           />
           {fieldHint("name")}
         </div>
@@ -93,7 +93,7 @@ export default function CreateUserPage() {
             autoComplete="off"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
-            className="mt-1 w-full rounded-md border border-zinc-300 px-3 py-2 text-sm"
+            className="ams-input mt-1"
           />
           {fieldHint("email")}
         </div>
@@ -118,7 +118,7 @@ export default function CreateUserPage() {
         </div>
         <button
           type="submit"
-          className="rounded-md bg-zinc-900 px-4 py-2 text-sm text-white hover:bg-zinc-800"
+          className="ams-btn-primary"
         >
           Create user
         </button>

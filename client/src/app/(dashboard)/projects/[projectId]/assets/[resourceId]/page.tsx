@@ -53,7 +53,7 @@ export default function AssetPage() {
   return (
     <div className="space-y-6">
       <div>
-        <Link href={backHref} className="text-sm text-zinc-600 hover:text-zinc-900">
+        <Link href={backHref} className="text-sm text-zinc-600 hover:text-emerald-900">
           ← Back to folder
         </Link>
         <div className="mt-2 flex items-center gap-3">

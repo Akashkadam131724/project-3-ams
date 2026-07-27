@@ -85,13 +85,13 @@ export default function ProjectsPage() {
               placeholder="Search projects"
               value={search}
               onChange={(e) => setSearch(e.target.value)}
-              className="w-full rounded-full border border-zinc-300 bg-white py-2 pl-9 pr-3 text-sm outline-none focus:border-zinc-500"
+              className="w-full rounded-full border border-zinc-300 bg-white py-2 pl-9 pr-3 text-sm outline-none focus:border-emerald-600 focus:ring-2 focus:ring-emerald-600/20"
             />
           </label>
           {user?.isSuperAdmin && (
             <Link
               href="/admin/create-project"
-              className="inline-flex justify-center rounded-full bg-zinc-900 px-5 py-2 text-sm font-medium text-white hover:bg-zinc-800"
+              className="ams-btn-primary-pill"
             >
               New
             </Link>
@@ -164,7 +164,7 @@ function ProjectTableRow({
   return (
     <li
       data-row-actions
-      className="border-b border-zinc-100 last:border-b-0 hover:bg-zinc-50"
+      className="border-b border-zinc-100 last:border-b-0 ams-row-hover"
     >
       <div className="flex items-center gap-3 px-4 py-3 sm:hidden">
         <ProjectIcon className="h-5 w-5 shrink-0 text-zinc-500" />

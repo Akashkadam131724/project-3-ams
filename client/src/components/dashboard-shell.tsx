@@ -59,7 +59,7 @@ function DashboardShellInner({ children }: { children: React.ReactNode }) {
   const scrollLocked = mainScroll === "locked";
 
   return (
-    <div className="flex h-dvh overflow-hidden bg-zinc-50">
+    <div className="flex h-dvh overflow-hidden bg-background">
       {mobileNavOpen && (
         <button
           type="button"
@@ -88,7 +88,7 @@ function DashboardShellInner({ children }: { children: React.ReactNode }) {
             <MenuIcon className="h-5 w-5" />
             <span className="sr-only">Menu</span>
           </button>
-          <span className="truncate text-base font-semibold text-zinc-900">
+          <span className="truncate text-base font-semibold text-emerald-900">
             AMS
           </span>
         </header>

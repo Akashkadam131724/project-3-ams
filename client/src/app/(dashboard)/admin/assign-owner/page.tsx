@@ -210,7 +210,7 @@ export default function AssignOwnerPage() {
           <button
             type="submit"
             disabled={!projectId || !userId}
-            className="rounded-md bg-zinc-900 px-4 py-2 text-sm text-white hover:bg-zinc-800 disabled:opacity-40"
+            className="ams-btn-primary disabled:opacity-40"
           >
             {ownerMember ? "Replace owner" : "Assign owner"}
           </button>

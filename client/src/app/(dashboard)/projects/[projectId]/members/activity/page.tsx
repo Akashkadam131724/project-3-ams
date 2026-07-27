@@ -77,7 +77,7 @@ export default function MemberActivityPage() {
     <>
       <Link
         href={`/projects/${projectId}/members`}
-        className="text-sm text-zinc-600 hover:text-zinc-900"
+        className="text-sm text-zinc-600 hover:text-emerald-900"
       >
         ← Back to members
       </Link>
