@@ -20,8 +20,8 @@ jobs:
           username: ${{ secrets.EC2_USERNAME }}
           key: ${{ secrets.EC2_SSH_KEY }}
           script: |
-            cd ~/project-3-ams
+            cd ~/project-3-ams/server
 
             IMAGE_TAG=${{ github.event.inputs.image_tag }}
 
-            IMAGE_TAG=$IMAGE_TAG ./deploy-backend-docker.sh
+            IMAGE_TAG=$IMAGE_TAG ./server/deploy-backend-docker.sh

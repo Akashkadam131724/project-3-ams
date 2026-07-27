@@ -10,7 +10,7 @@ jobs:
     runs-on: ubuntu-latest
 
     env:
-      IMAGE_NAME: akash131/server-api
+      IMAGE_NAME: akash131/ams-server
 
     steps:
       - name: Checkout Repository

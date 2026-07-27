@@ -1,6 +1,6 @@
 services:
   api:
-    image: akash131/server-api:${IMAGE_TAG:-latest}
+    image: akash131/ams-server:${IMAGE_TAG:-latest}
     ports:
       - "3004:3004"
     env_file:
