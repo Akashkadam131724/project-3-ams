@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import { AssetMeta, AssetPreview } from "@/components/asset-preview";
+import { ResourceFileIcon } from "@/lib/file-type-icons";
 import { ApiError, resourcesApi } from "@/lib/api";
 import { projectFolderPath, projectPath } from "@/lib/paths";
 import type { Resource } from "@/lib/types";
@@ -55,7 +56,14 @@ export default function AssetPage() {
         <Link href={backHref} className="text-sm text-zinc-600 hover:text-zinc-900">
           ← Back to folder
         </Link>
-        <h1 className="mt-2 text-2xl font-semibold">{resource.name}</h1>
+        <div className="mt-2 flex items-center gap-3">
+          <ResourceFileIcon
+            type="file"
+            mimeType={resource.mimeType}
+            name={resource.name}
+          />
+          <h1 className="text-2xl font-semibold">{resource.name}</h1>
+        </div>
       </div>
 
       <AssetPreview resource={resource} />

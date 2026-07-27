@@ -1,11 +1,9 @@
 import type { Resource } from "@/lib/types";
-
-function formatBytes(n?: number) {
-  if (n == null) return "";
-  if (n < 1024) return `${n} B`;
-  if (n < 1024 * 1024) return `${(n / 1024).toFixed(1)} KB`;
-  return `${(n / (1024 * 1024)).toFixed(1)} MB`;
-}
+import {
+  formatBytes,
+  formatResourceDate,
+  resourceUserLabel,
+} from "@/lib/resource-meta";
 
 export function AssetPreview({ resource }: { resource: Resource }) {
   const url = resource.publicUrl;
@@ -88,8 +86,37 @@ export function AssetPreview({ resource }: { resource: Resource }) {
 }
 
 export function AssetMeta({ resource }: { resource: Resource }) {
+  const ownerLabel = resource.owner
+    ? resourceUserLabel(resource.owner)
+    : null;
+  const createdByLabel = resourceUserLabel(resource.createdBy);
+  const showUpdated =
+    resource.updatedAt &&
+    resource.createdAt &&
+    resource.updatedAt !== resource.createdAt;
+
   return (
-    <dl className="grid gap-2 text-sm sm:grid-cols-2">
+    <dl className="grid gap-3 text-sm sm:grid-cols-2">
+      <div>
+        <dt className="text-zinc-500">Created by</dt>
+        <dd>{createdByLabel}</dd>
+      </div>
+      <div>
+        <dt className="text-zinc-500">Created</dt>
+        <dd>{formatResourceDate(resource.createdAt)}</dd>
+      </div>
+      {showUpdated && (
+        <div>
+          <dt className="text-zinc-500">Last updated</dt>
+          <dd>{formatResourceDate(resource.updatedAt)}</dd>
+        </div>
+      )}
+      {ownerLabel && ownerLabel !== createdByLabel && (
+        <div>
+          <dt className="text-zinc-500">File owner</dt>
+          <dd>{ownerLabel}</dd>
+        </div>
+      )}
       <div>
         <dt className="text-zinc-500">MIME type</dt>
         <dd>{resource.mimeType || "—"}</dd>

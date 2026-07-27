@@ -16,14 +16,6 @@ export function rolesActorCanAssign(
   return ASSIGNABLE_ROLES[projectRole] ?? [];
 }
 
-export function canViewActivity(
-  isSuperAdmin: boolean,
-  projectRole?: ProjectRole | null
-) {
-  if (isSuperAdmin) return true;
-  return projectRole === "project_owner" || projectRole === "admin";
-}
-
 export const ACTIVITY_LABELS: Record<string, string> = {
   folder_created: "Folder created",
   file_uploaded: "File uploaded",

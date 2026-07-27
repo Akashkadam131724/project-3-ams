@@ -6,6 +6,8 @@ import type {
   ProjectRole,
   Resource,
   ResourceActivity,
+  ResourceListPagination,
+  ResourceListSort,
   User,
 } from "./types";
 
@@ -213,14 +215,34 @@ export const memberActivityApi = {
     ),
 };
 
+export type ResourceListParams = {
+  folderId?: string | null;
+  q?: string;
+  type?: "all" | "folder" | "file";
+  sortBy?: string;
+  sortOrder?: "asc" | "desc";
+  page?: number;
+  pageSize?: number;
+};
+
 export const resourcesApi = {
-  list: (projectId: string, folderId?: string | null) => {
-    const qs = folderId
-      ? `?resourceId=${encodeURIComponent(folderId)}`
-      : "";
-    return apiFetch<{ resources: Resource[] }>(
-      `/api/v1/projects/${projectId}/resources${qs}`
-    );
+  list: (projectId: string, params: ResourceListParams = {}) => {
+    const sp = new URLSearchParams();
+    if (params.folderId) {
+      sp.set("resourceId", params.folderId);
+    }
+    if (params.q) sp.set("q", params.q);
+    if (params.type && params.type !== "all") sp.set("type", params.type);
+    if (params.sortBy) sp.set("sortBy", params.sortBy);
+    if (params.sortOrder) sp.set("sortOrder", params.sortOrder);
+    if (params.page != null) sp.set("page", String(params.page));
+    if (params.pageSize != null) sp.set("pageSize", String(params.pageSize));
+    const qs = sp.toString();
+    return apiFetch<{
+      resources: Resource[];
+      sort: ResourceListSort;
+      pagination: ResourceListPagination;
+    }>(`/api/v1/projects/${projectId}/resources${qs ? `?${qs}` : ""}`);
   },
 
   get: (projectId: string, resourceId: string) =>

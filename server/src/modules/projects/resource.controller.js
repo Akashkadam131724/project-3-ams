@@ -17,6 +17,10 @@ import {
 } from "../../common/errors/AppError.js";
 import { RESOURCE_ACTIVITY_ACTIONS } from "./resourceActivity.constants.js";
 import { logResourceActivity } from "./resourceActivity.service.js";
+import { queryProjectResources } from "./resource.list.service.js";
+import { listResourcesQuerySchema } from "./resource.validator.js";
+import { formatValidationError } from "../../common/helpers/validation.helper.js";
+import { ValidationError } from "../../common/errors/AppError.js";
 
 const assertCanManageFile = (resource, user, projectMember) => {
   if (user.isSuperAdmin) return true;
@@ -33,18 +37,36 @@ const assertCanManageFile = (resource, user, projectMember) => {
 
 const listResources = async (req, res, next) => {
   try {
+    const parsed = listResourcesQuerySchema.safeParse(req.query);
+    if (!parsed.success) {
+      return next(new ValidationError(formatValidationError(parsed.error)));
+    }
+
     const projectId = req.project._id;
-    const resourceId = parseOptionalResourceId(req.query.resourceId);
+    const {
+      resourceId,
+      q,
+      type,
+      sortBy,
+      sortOrder,
+      page,
+      pageSize,
+    } = parsed.data;
 
-    const resources = await Resource.find({
+    const parentId = parseOptionalResourceId(resourceId);
+
+    const result = await queryProjectResources({
       projectId,
-      parentId: resourceId || null,
-    })
-      .sort({ type: 1, name: 1 })
-      .populate("owner", "name email")
-      .populate("createdBy", "name email");
+      parentId,
+      q,
+      type,
+      sortBy,
+      sortOrder,
+      page,
+      pageSize,
+    });
 
-    res.status(200).json({ resources });
+    res.status(200).json(result);
   } catch (error) {
     next(error);
   }
