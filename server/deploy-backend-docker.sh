@@ -1,78 +1,92 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
-set -e
+set -euo pipefail
 
-IMAGE_TAG=${IMAGE_TAG:-latest}
+IMAGE_TAG="${IMAGE_TAG:-latest}"
+GIT_BRANCH="${GIT_BRANCH:-main}"
 HEALTH_ENDPOINT="/health"
 
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+cd "$SCRIPT_DIR"
+
 echo ""
 echo "========================================"
-echo "🚀 Starting Deployment"
+echo "Starting deployment"
 echo "========================================"
-echo "Image Tag : $IMAGE_TAG"
+echo "Directory  : $SCRIPT_DIR"
+echo "Image tag  : $IMAGE_TAG"
+echo "Git branch : $GIT_BRANCH"
 echo ""
 
-cd "$(dirname "$0")"
+if ! command -v docker >/dev/null 2>&1; then
+  echo "docker is not installed or not in PATH"
+  exit 1
+fi
 
-echo "📥 Pulling latest code..."
-git pull origin main
+if docker compose version >/dev/null 2>&1; then
+  COMPOSE=(docker compose)
+elif command -v docker-compose >/dev/null 2>&1; then
+  COMPOSE=(docker-compose)
+else
+  echo "docker compose / docker-compose not found"
+  exit 1
+fi
 
-# Load environment variables from .env
+if [ ! -f .env ]; then
+  echo "Missing .env in $SCRIPT_DIR — create it on the server before deploying."
+  exit 1
+fi
+
+echo "Pulling latest code..."
+git fetch origin "$GIT_BRANCH"
+git checkout "$GIT_BRANCH"
+git pull origin "$GIT_BRANCH"
+
 set -a
+# shellcheck disable=SC1091
 source .env
 set +a
 
-APP_PORT=${PORT}
+APP_PORT="${PORT:-3004}"
 
 echo ""
-echo "📦 Pulling Docker image..."
-IMAGE_TAG=$IMAGE_TAG docker compose pull
+echo "Pulling Docker image..."
+IMAGE_TAG="$IMAGE_TAG" "${COMPOSE[@]}" pull
 
 echo ""
-echo "🔄 Restarting containers..."
-IMAGE_TAG=$IMAGE_TAG docker compose up -d
+echo "Restarting containers..."
+IMAGE_TAG="$IMAGE_TAG" "${COMPOSE[@]}" up -d
 
 echo ""
-echo "⏳ Waiting for application to start..."
+echo "Waiting for application to start..."
 sleep 5
 
 echo ""
-echo "❤️ Running health check..."
+echo "Running health check..."
 
 if HEALTH_RESPONSE=$(curl --silent --fail "http://localhost:${APP_PORT}${HEALTH_ENDPOINT}"); then
-
-    echo ""
-    echo "✅ Health Check Passed"
-    echo "$HEALTH_RESPONSE"
-
+  echo ""
+  echo "Health check passed"
+  echo "$HEALTH_RESPONSE"
 else
-
-    echo ""
-    echo "❌ Health Check Failed"
-    echo ""
-
-    echo "📋 Container Status"
-    docker compose ps
-
-    echo ""
-    echo "📜 Last 100 Container Logs"
-    docker compose logs --tail=100 api
-
-    exit 1
-
+  echo ""
+  echo "Health check failed"
+  echo ""
+  "${COMPOSE[@]}" ps
+  echo ""
+  "${COMPOSE[@]}" logs --tail=100 api
+  exit 1
 fi
 
 echo ""
-echo "🧹 Cleaning unused Docker images..."
 docker image prune -f
 
 echo ""
-echo "📋 Running Containers"
-docker compose ps
+"${COMPOSE[@]}" ps
 
 echo ""
 echo "========================================"
-echo "✅ Deployment Successful"
+echo "Deployment successful"
 echo "========================================"
 echo "Image      : akash131/ams-server:$IMAGE_TAG"
 echo "Health URL : http://localhost:${APP_PORT}${HEALTH_ENDPOINT}"
