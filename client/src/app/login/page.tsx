@@ -60,7 +60,7 @@ export default function LoginPage() {
 
   if (loading) {
     return (
-      <div className="flex min-h-screen items-center justify-center bg-zinc-50 text-zinc-500">
+      <div className="flex min-h-screen items-center justify-center bg-background text-zinc-500">
         Loading…
       </div>
     );
@@ -103,8 +103,13 @@ export default function LoginPage() {
         </div>
       </aside>
 
-      <main className="flex flex-1 flex-col justify-center bg-zinc-50 px-5 py-10 sm:px-8 lg:px-12 xl:px-16">
-        <div className="mx-auto w-full max-w-[400px]">
+      <main className="relative flex flex-1 flex-col justify-center overflow-hidden bg-background px-5 py-10 sm:px-8 lg:px-12 xl:px-16">
+        <div className="pointer-events-none absolute inset-0 bg-gradient-to-br from-background via-emerald-50/50 to-emerald-100/40" aria-hidden>
+          <div className="absolute -right-24 top-1/4 h-72 w-72 rounded-full bg-emerald-300/20 blur-3xl" />
+          <div className="absolute -left-16 bottom-1/4 h-64 w-64 rounded-full bg-emerald-400/15 blur-3xl" />
+        </div>
+
+        <div className="relative z-10 mx-auto w-full max-w-[440px]">
           <div className="mb-8 flex items-center gap-2.5 lg:hidden">
             <span className="flex h-9 w-9 items-center justify-center rounded-lg bg-emerald-700 text-white">
               <IconAmsLogo className="h-5 w-5" />
@@ -115,14 +120,16 @@ export default function LoginPage() {
           <h1 className="text-2xl font-semibold tracking-tight text-zinc-900">
             Welcome back
           </h1>
-          <p className="mt-2 text-sm text-zinc-500">
+          <p className="mt-2 text-sm text-zinc-600">
             Sign in with your AMS account to open projects and assets.
           </p>
 
-          <form
-            onSubmit={onSubmit}
-            className="mt-8 space-y-5 rounded-2xl border border-zinc-200/80 bg-white p-6 shadow-sm sm:p-8"
-          >
+          <div className="relative mt-8">
+             
+            <form
+              onSubmit={onSubmit}
+              className="relative space-y-5 rounded-2xl border border-white/80 bg-white/90 p-6 shadow-sm backdrop-blur-sm sm:p-8"
+            >
             <div>
               <label
                 htmlFor="email"
@@ -183,9 +190,10 @@ export default function LoginPage() {
             >
               {submitting ? "Signing in…" : "Sign in"}
             </button>
-          </form>
+            </form>
+          </div>
 
-          <p className="mt-6 text-center text-xs text-zinc-400">
+          <p className="mt-6 text-center text-xs text-zinc-500">
             Asset Management System · Internal use
           </p>
         </div>
