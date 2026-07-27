@@ -7,6 +7,10 @@ on:
         description: "Docker image tag"
         required: true
         default: "latest"
+      git_branch:
+        description: "Branch to pull on the server"
+        required: false
+        default: "main"
 
 jobs:
   deploy:
@@ -19,9 +23,30 @@ jobs:
           host: ${{ secrets.EC2_HOST }}
           username: ${{ secrets.EC2_USERNAME }}
           key: ${{ secrets.EC2_SSH_KEY }}
+          script_stop: true
           script: |
-            cd ~/project-3-ams/server
+            set -e
+            export IMAGE_TAG="${{ github.event.inputs.image_tag }}"
+            export GIT_BRANCH="${{ github.event.inputs.git_branch }}"
 
-            IMAGE_TAG=${{ github.event.inputs.image_tag }}
+            DEPLOY_DIR="${EC2_DEPLOY_DIR:-$HOME/project-3-ams/server}"
 
-            IMAGE_TAG=$IMAGE_TAG ./deploy-backend-docker.sh
+            if [ ! -d "$DEPLOY_DIR" ]; then
+              echo "Deploy directory not found: $DEPLOY_DIR"
+              echo "Home contents:"
+              ls -la "$HOME" || true
+              exit 1
+            fi
+
+            cd "$DEPLOY_DIR"
+
+            if [ ! -f "./deploy-backend-docker.sh" ]; then
+              echo "deploy-backend-docker.sh not found in $(pwd)"
+              ls -la
+              exit 1
+            fi
+
+            # Fix Windows line endings if present (causes: bash\r: No such file or directory)
+            sed -i 's/\r$//' ./deploy-backend-docker.sh 2>/dev/null || sed -i '' 's/\r$//' ./deploy-backend-docker.sh 2>/dev/null || true
+
+            bash ./deploy-backend-docker.sh
