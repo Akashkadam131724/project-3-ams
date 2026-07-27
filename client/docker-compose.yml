@@ -1,7 +1,6 @@
 services:
   client:
-    image: akashkadam/ams-client:latest
-    restart: unless-stopped
-
+    image: akash131/ams-client:${IMAGE_TAG:-latest}
     ports:
       - "3001:3000"
+    restart: unless-stopped
