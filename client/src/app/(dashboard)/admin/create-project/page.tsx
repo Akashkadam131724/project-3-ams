@@ -69,7 +69,7 @@ export default function CreateProjectPage() {
             required
             value={name}
             onChange={(e) => setName(e.target.value)}
-            className="mt-1 w-full rounded-md border border-zinc-300 px-3 py-2 text-sm"
+            className="ams-input mt-1"
           />
         </div>
         <div>
@@ -81,12 +81,12 @@ export default function CreateProjectPage() {
             rows={3}
             value={description}
             onChange={(e) => setDescription(e.target.value)}
-            className="mt-1 w-full rounded-md border border-zinc-300 px-3 py-2 text-sm"
+            className="ams-input mt-1"
           />
         </div>
         <button
           type="submit"
-          className="rounded-md bg-zinc-900 px-4 py-2 text-sm text-white hover:bg-zinc-800"
+          className="ams-btn-primary"
         >
           Create project
         </button>

@@ -82,7 +82,7 @@ export default function AdminUsersPage() {
       <h1 className="text-2xl font-semibold">Users</h1>
       <p className="mt-1 text-sm text-zinc-500">
         All accounts in the system. Disabled users cannot log in.{" "}
-        <Link href="/admin/create-user" className="text-zinc-900 underline">
+        <Link href="/admin/create-user" className="ams-link">
           Create a user
         </Link>
         .
@@ -117,8 +117,8 @@ export default function AdminUsersPage() {
               onClick={() => setStatusFilter(value)}
               className={`rounded-md px-3 py-1.5 text-sm ${
                 statusFilter === value
-                  ? "bg-zinc-900 text-white"
-                  : "border border-zinc-300 text-zinc-700 hover:bg-zinc-50"
+                  ? "bg-emerald-800 text-white"
+                  : "border border-zinc-300 text-zinc-700 hover:bg-emerald-50"
               }`}
             >
               {label}

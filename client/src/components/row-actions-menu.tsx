@@ -146,7 +146,7 @@ export function RowActionsMenu({ items }: { items: RowMenuItem[] }) {
           e.stopPropagation();
           setOpen((v) => !v);
         }}
-        className="rounded-md p-1.5 text-zinc-500 hover:bg-zinc-200/80 hover:text-zinc-900"
+        className="rounded-md p-1.5 text-zinc-500 hover:bg-emerald-100/80 hover:text-emerald-900"
         aria-label="Actions"
       >
         <svg viewBox="0 0 24 24" className="h-5 w-5" fill="currentColor" aria-hidden>

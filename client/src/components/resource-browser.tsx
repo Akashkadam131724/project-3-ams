@@ -362,8 +362,8 @@ export function ResourceBrowser({
           compact ? "px-2.5 py-1 text-xs" : "px-4 py-1.5 text-sm"
         } ${
           typeFilter === value
-            ? "bg-zinc-200 text-zinc-900"
-            : "text-zinc-600 hover:bg-zinc-100"
+            ? "ams-segment-active"
+            : "text-zinc-600 hover:bg-emerald-50"
         }`}
       >
         {compact && value !== "all" ? label.replace(/s$/, "") : label}
@@ -388,12 +388,12 @@ export function ResourceBrowser({
             aria-label="Folder name"
             value={newFolderName}
             onChange={(e) => setNewFolderName(e.target.value)}
-            className="min-w-0 flex-1 rounded-md border border-zinc-200 bg-white px-2 py-1.5 text-sm outline-none focus:border-zinc-400 sm:border-0 sm:bg-transparent sm:py-2"
+            className="min-w-0 flex-1 rounded-md border border-zinc-200 bg-white px-2 py-1.5 text-sm outline-none focus:border-emerald-600 focus:ring-2 focus:ring-emerald-600/20 sm:border-0 sm:bg-transparent sm:py-2"
           />
           <button
             type="submit"
             disabled={!newFolderName.trim()}
-            className="shrink-0 rounded-full bg-zinc-900 px-3 py-1.5 text-xs font-medium text-white hover:bg-zinc-800 disabled:opacity-50 sm:px-4 sm:py-2 sm:text-sm"
+            className="shrink-0 rounded-full bg-emerald-800 px-3 py-1.5 text-xs font-medium text-white hover:bg-emerald-900 disabled:opacity-50 sm:px-4 sm:py-2 sm:text-sm"
           >
             Create
           </button>
@@ -444,7 +444,7 @@ export function ResourceBrowser({
   return (
     <div className="flex h-full min-h-0 w-full flex-col">
       {/* Compact chrome: phone & tablet */}
-      <div className="shrink-0 space-y-2 border-b border-zinc-200 bg-zinc-50 px-4 py-2 lg:hidden">
+      <div className="shrink-0 space-y-2 border-b border-emerald-200/50 bg-emerald-50/40 px-4 py-2 lg:hidden">
         <div className="flex items-center gap-2">
           <Link
             href={backHref}
@@ -483,7 +483,7 @@ export function ResourceBrowser({
             placeholder="Search"
             value={search}
             onChange={(e) => setSearch(e.target.value)}
-            className="w-full rounded-lg border border-zinc-300 bg-white py-1.5 pl-8 pr-2 text-sm outline-none focus:border-zinc-500"
+            className="w-full rounded-lg border border-zinc-300 bg-white py-1.5 pl-8 pr-2 text-sm outline-none focus:border-emerald-600 focus:ring-2 focus:ring-emerald-600/20"
           />
         </label>
 
@@ -511,7 +511,7 @@ export function ResourceBrowser({
           <div className="min-w-0">
             <Link
               href={backHref}
-              className="inline-flex max-w-full items-center gap-1.5 truncate text-sm text-zinc-600 hover:text-zinc-900"
+              className="inline-flex max-w-full items-center gap-1.5 truncate text-sm text-zinc-600 hover:text-emerald-900"
             >
               <span aria-hidden>←</span>
               Back to {backLabel}
@@ -520,13 +520,13 @@ export function ResourceBrowser({
               {currentFolderName}
             </h1>
             <div className="mt-1 flex flex-wrap items-center gap-2 text-sm text-zinc-500">
-              <Link href="/projects" className="hover:text-zinc-800">
+              <Link href="/projects" className="hover:text-emerald-800">
                 Projects
               </Link>
               {crumbs.slice(0, -1).map((c) => (
                 <span key={c.id ?? "root"} className="flex items-center gap-2">
                   <span>/</span>
-                  <Link href={crumbHref(c)} className="hover:text-zinc-800">
+                  <Link href={crumbHref(c)} className="hover:text-emerald-800">
                     {c.name}
                   </Link>
                 </span>
@@ -552,7 +552,7 @@ export function ResourceBrowser({
                 placeholder="Search in folder"
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
-                className="w-full rounded-full border border-zinc-300 bg-white py-2 pl-9 pr-3 text-sm outline-none focus:border-zinc-500"
+                className="w-full rounded-full border border-zinc-300 bg-white py-2 pl-9 pr-3 text-sm outline-none focus:border-emerald-600 focus:ring-2 focus:ring-emerald-600/20"
               />
             </label>
             <ResourceViewToggle mode={viewMode} onChange={onViewModeChange} />

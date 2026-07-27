@@ -1,8 +1,12 @@
 @import "tailwindcss";
 
 :root {
-  --background: #fafafa;
-  --foreground: #18181b;
+  --background: #f0f5f2;
+  --foreground: #0f1c14;
+  --ams-primary: #065f46;
+  --ams-primary-hover: #064e3b;
+  --ams-surface: #ffffff;
+  --ams-muted-surface: #e8f0eb;
 }
 
 @theme inline {
@@ -19,9 +23,39 @@ body {
   overflow-x: hidden;
 }
 
+@layer components {
+  .ams-btn-primary {
+    @apply rounded-md bg-emerald-800 px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-emerald-900 disabled:opacity-60;
+  }
+
+  .ams-btn-primary-pill {
+    @apply inline-flex items-center justify-center rounded-full bg-emerald-800 px-5 py-2 text-sm font-medium text-white transition-colors hover:bg-emerald-900 disabled:opacity-50;
+  }
+
+  .ams-input {
+    @apply w-full rounded-md border border-zinc-300 bg-white px-3 py-2 text-sm outline-none transition-shadow placeholder:text-zinc-400 focus:border-emerald-600 focus:ring-2 focus:ring-emerald-600/20;
+  }
+
+  .ams-segment-active {
+    @apply bg-emerald-100 text-emerald-950;
+  }
+
+  .ams-nav-active {
+    @apply bg-emerald-800 font-medium text-white;
+  }
+
+  .ams-link {
+    @apply text-emerald-800 underline decoration-emerald-800/30 underline-offset-2 hover:decoration-emerald-800;
+  }
+
+  .ams-row-hover {
+    @apply hover:bg-emerald-50/70;
+  }
+}
+
 .ams-scrollbar-thin {
   scrollbar-width: thin;
-  scrollbar-color: rgb(212 212 216) transparent;
+  scrollbar-color: rgb(110 168 139 / 0.55) transparent;
 }
 
 .ams-scrollbar-thin::-webkit-scrollbar {
@@ -30,7 +64,7 @@ body {
 }
 
 .ams-scrollbar-thin::-webkit-scrollbar-thumb {
-  background-color: rgb(212 212 216);
+  background-color: rgb(110 168 139 / 0.55);
   border-radius: 9999px;
 }
 

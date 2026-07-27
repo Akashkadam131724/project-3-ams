@@ -73,7 +73,7 @@ export function SortableColumnHeader({
     <button
       type="button"
       onClick={() => onSort(field)}
-      className={`group/sort inline-flex items-center gap-1 text-xs font-medium hover:text-zinc-800 ${active ? "text-zinc-900" : "text-zinc-500"} ${className}`}
+      className={`group/sort inline-flex items-center gap-1 text-xs font-medium hover:text-emerald-800 ${active ? "text-emerald-900" : "text-zinc-500"} ${className}`}
       aria-sort={
         active
           ? sortDirection === "asc"
@@ -112,7 +112,7 @@ export function ResourceSortControl({
         id="resource-sort-field"
         value={sortField}
         onChange={(e) => onFieldChange(e.target.value as ResourceSortField)}
-        className={`min-w-0 rounded-full border border-zinc-300 bg-white text-zinc-800 outline-none focus:border-zinc-500 ${
+        className={`min-w-0 rounded-full border border-zinc-300 bg-white text-zinc-800 outline-none focus:border-emerald-600 focus:ring-2 focus:ring-emerald-600/20 ${
           compact
             ? "max-w-[7.5rem] py-1 pl-2 pr-6 text-xs"
             : "flex-1 py-1.5 pl-3 pr-8 text-sm sm:flex-none sm:min-w-[9rem]"
@@ -127,7 +127,7 @@ export function ResourceSortControl({
       <button
         type="button"
         onClick={onDirectionToggle}
-        className={`rounded-full border border-zinc-300 text-zinc-700 hover:bg-zinc-50 ${
+        className={`rounded-full border border-zinc-300 text-zinc-700 hover:bg-emerald-50 ${
           compact ? "p-1.5" : "p-2"
         }`}
         aria-label={
@@ -184,7 +184,7 @@ export function ResourceListRow({
     <div
       role="listitem"
       data-row-actions
-      className="border-b border-zinc-200 hover:bg-zinc-50"
+      className="border-b border-zinc-200 ams-row-hover"
     >
       <div className="flex h-14 items-center gap-3 px-0 lg:hidden">
         <ResourceFileIcon
@@ -427,8 +427,8 @@ export function ResourceViewToggle({
           compact ? "p-1.5" : "flex-1 gap-1.5 px-3 py-1.5 text-sm sm:flex-none"
         } ${
           mode === "list"
-            ? "bg-zinc-200 text-zinc-900"
-            : "text-zinc-600 hover:bg-zinc-50"
+            ? "ams-segment-active"
+            : "text-zinc-600 hover:bg-emerald-50"
         }`}
         aria-pressed={mode === "list"}
         title="List view"
@@ -444,8 +444,8 @@ export function ResourceViewToggle({
           compact ? "p-1.5" : "flex-1 gap-1.5 px-3 py-1.5 text-sm sm:flex-none"
         } ${
           mode === "grid"
-            ? "bg-zinc-200 text-zinc-900"
-            : "text-zinc-600 hover:bg-zinc-50"
+            ? "ams-segment-active"
+            : "text-zinc-600 hover:bg-emerald-50"
         }`}
         aria-pressed={mode === "grid"}
         title="Card view"
