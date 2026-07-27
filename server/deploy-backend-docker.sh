@@ -12,7 +12,7 @@ echo "========================================"
 echo "Image Tag : $IMAGE_TAG"
 echo ""
 
-cd "$(dirname "$0")/server"
+cd "$(dirname "$0")"
 
 echo "📥 Pulling latest code..."
 git pull origin main
