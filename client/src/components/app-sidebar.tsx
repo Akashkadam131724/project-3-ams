@@ -10,6 +10,7 @@ import {
   iconForNavHref,
   NavIconLogout,
 } from "@/components/sidebar-nav-icons";
+import { IconChevronSidebar } from "@/components/icons";
 import { useEffect, useState, type ReactNode } from "react";
 
 function NavLink({
@@ -63,25 +64,6 @@ function NavLink({
       <span className="shrink-0 [&_svg]:h-5 [&_svg]:w-5">{icon}</span>
       {!collapsed && <span className="truncate">{label}</span>}
     </Link>
-  );
-}
-
-function SidebarToggleIcon({ collapsed }: { collapsed: boolean }) {
-  return (
-    <svg
-      viewBox="0 0 24 24"
-      className="h-5 w-5"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="2"
-      aria-hidden
-    >
-      {collapsed ? (
-        <path d="m9 6 6 6-6 6" />
-      ) : (
-        <path d="m15 6-6 6 6 6" />
-      )}
-    </svg>
   );
 }
 
@@ -144,7 +126,7 @@ export function AppSidebar({
             className="hidden rounded-md p-1.5 text-emerald-800/80 hover:bg-emerald-50 lg:inline-flex"
             aria-label="Collapse sidebar"
           >
-            <SidebarToggleIcon collapsed={false} />
+            <IconChevronSidebar collapsed={false} />
           </button>
         )}
       </div>
@@ -156,7 +138,7 @@ export function AppSidebar({
           className="mx-auto mb-1 hidden shrink-0 rounded-md p-1.5 text-emerald-800/80 hover:bg-emerald-50 lg:flex"
           aria-label="Expand sidebar"
         >
-          <SidebarToggleIcon collapsed />
+          <IconChevronSidebar collapsed />
         </button>
       )}
 

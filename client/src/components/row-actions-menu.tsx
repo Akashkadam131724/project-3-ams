@@ -1,5 +1,6 @@
 "use client";
 
+import { IconMoreHorizontal } from "@/components/icons";
 import {
   useEffect,
   useId,
@@ -149,11 +150,7 @@ export function RowActionsMenu({ items }: { items: RowMenuItem[] }) {
         className="rounded-md p-1.5 text-zinc-500 hover:bg-emerald-100/80 hover:text-emerald-900"
         aria-label="Actions"
       >
-        <svg viewBox="0 0 24 24" className="h-5 w-5" fill="currentColor" aria-hidden>
-          <circle cx="5" cy="12" r="1.75" />
-          <circle cx="12" cy="12" r="1.75" />
-          <circle cx="19" cy="12" r="1.75" />
-        </svg>
+        <IconMoreHorizontal className="h-5 w-5" />
       </button>
       {menu}
     </div>

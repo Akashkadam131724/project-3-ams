@@ -8,6 +8,13 @@ import { resourceUserLabel } from "@/lib/resource-meta";
 import { projectAssetPath, projectFolderPath } from "@/lib/paths";
 import { RowActionsMenu } from "@/components/row-actions-menu";
 import {
+  IconGrid,
+  IconList,
+  IconSortAsc,
+  IconSortDesc,
+  IconSortInactive,
+} from "@/components/icons";
+import {
   RESOURCE_SORT_FIELDS,
   type ResourceSortDirection,
   type ResourceSortField,
@@ -22,35 +29,9 @@ function SortIndicator({
   direction: ResourceSortDirection;
 }) {
   if (!active) {
-    return (
-      <svg
-        viewBox="0 0 24 24"
-        className="h-3.5 w-3.5 shrink-0 opacity-0 group-hover/sort:opacity-40"
-        fill="none"
-        stroke="currentColor"
-        strokeWidth="2"
-        aria-hidden
-      >
-        <path d="M8 9h8M8 15h8" />
-      </svg>
-    );
+    return <IconSortInactive />;
   }
-  return (
-    <svg
-      viewBox="0 0 24 24"
-      className="h-3.5 w-3.5 shrink-0"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="2"
-      aria-hidden
-    >
-      {direction === "asc" ? (
-        <path d="M12 5v14M5 12l7-7 7 7" />
-      ) : (
-        <path d="M12 19V5M5 12l7 7 7-7" />
-      )}
-    </svg>
-  );
+  return direction === "asc" ? <IconSortAsc /> : <IconSortDesc />;
 }
 
 export function SortableColumnHeader({
@@ -370,39 +351,6 @@ export function writeResourceViewMode(mode: ResourceViewMode) {
   localStorage.setItem(STORAGE_KEY, mode);
 }
 
-function ListViewIcon({ className }: { className?: string }) {
-  return (
-    <svg
-      viewBox="0 0 24 24"
-      className={className}
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="2"
-      aria-hidden
-    >
-      <path d="M4 6h16M4 12h16M4 18h16" />
-    </svg>
-  );
-}
-
-function GridViewIcon({ className }: { className?: string }) {
-  return (
-    <svg
-      viewBox="0 0 24 24"
-      className={className}
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="2"
-      aria-hidden
-    >
-      <rect x="3" y="3" width="7" height="7" rx="1" />
-      <rect x="14" y="3" width="7" height="7" rx="1" />
-      <rect x="3" y="14" width="7" height="7" rx="1" />
-      <rect x="14" y="14" width="7" height="7" rx="1" />
-    </svg>
-  );
-}
-
 export function ResourceViewToggle({
   mode,
   onChange,
@@ -433,7 +381,7 @@ export function ResourceViewToggle({
         aria-pressed={mode === "list"}
         title="List view"
       >
-        <ListViewIcon className={compact ? "h-4 w-4" : "h-4 w-4"} />
+        <IconList className="h-4 w-4" />
         {!compact && <span>List</span>}
         {compact && <span className="sr-only">List</span>}
       </button>
@@ -450,7 +398,7 @@ export function ResourceViewToggle({
         aria-pressed={mode === "grid"}
         title="Card view"
       >
-        <GridViewIcon className="h-4 w-4" />
+        <IconGrid className="h-4 w-4" />
         {!compact && <span>Cards</span>}
         {compact && <span className="sr-only">Cards</span>}
       </button>

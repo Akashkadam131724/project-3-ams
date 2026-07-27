@@ -4,28 +4,14 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useEffect, useMemo, useState } from "react";
 import { RowActionsMenu } from "@/components/row-actions-menu";
+import { IconProject } from "@/components/icons";
+import { SearchField } from "@/components/ui/search-field";
 import { useAuth } from "@/contexts/auth-context";
 import { ApiError, projectsApi } from "@/lib/api";
 import { formatModifiedShort } from "@/lib/format-date";
 import { projectPath } from "@/lib/paths";
 import { ROLE_LABELS } from "@/lib/roles";
 import type { Project, ProjectRole } from "@/lib/types";
-
-function ProjectIcon({ className }: { className?: string }) {
-  return (
-    <svg
-      viewBox="0 0 24 24"
-      className={className}
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="2"
-      aria-hidden
-    >
-      <path d="M12 3 4 7v10l8 4 8-4V7l-8-4Z" />
-      <path d="m4 7 8 4 8-4M12 11v10" />
-    </svg>
-  );
-}
 
 export default function ProjectsPage() {
   const router = useRouter();
@@ -61,33 +47,19 @@ export default function ProjectsPage() {
   }, [projects, search]);
 
   return (
-    <div className="mx-auto w-full min-w-0 max-w-4xl">
+    <div className="mx-auto w-full min-w-0">
       <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
         <h1 className="text-2xl font-semibold tracking-tight text-zinc-900 sm:text-3xl">
           Projects
         </h1>
         <div className="flex w-full min-w-0 flex-col gap-2 sm:w-auto sm:flex-row sm:items-center">
-          <label className="relative block min-w-0 sm:w-56">
-            <span className="sr-only">Search projects</span>
-            <svg
-              className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-zinc-400"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="2"
-              aria-hidden
-            >
-              <circle cx="11" cy="11" r="8" />
-              <path d="m21 21-4.3-4.3" />
-            </svg>
-            <input
-              type="search"
-              placeholder="Search projects"
-              value={search}
-              onChange={(e) => setSearch(e.target.value)}
-              className="w-full rounded-full border border-zinc-300 bg-white py-2 pl-9 pr-3 text-sm outline-none focus:border-emerald-600 focus:ring-2 focus:ring-emerald-600/20"
-            />
-          </label>
+          <SearchField
+            className="min-w-0 sm:w-56"
+            label="Search projects"
+            placeholder="Search projects"
+            value={search}
+            onChange={setSearch}
+          />
           {user?.isSuperAdmin && (
             <Link
               href="/admin/create-project"
@@ -167,7 +139,7 @@ function ProjectTableRow({
       className="border-b border-zinc-100 last:border-b-0 ams-row-hover"
     >
       <div className="flex items-center gap-3 px-4 py-3 sm:hidden">
-        <ProjectIcon className="h-5 w-5 shrink-0 text-zinc-500" />
+        <IconProject className="h-5 w-5 shrink-0 text-zinc-500" />
         <div className="min-w-0 flex-1">
           <Link
             href={projectPath(project._id)}
@@ -187,7 +159,7 @@ function ProjectTableRow({
       </div>
       <div className="group hidden grid-cols-[1fr_6rem_2.5rem] items-center gap-4 px-4 py-2.5 sm:grid">
         <div className="flex min-w-0 items-center gap-3">
-          <ProjectIcon className="h-5 w-5 shrink-0 text-zinc-500" />
+          <IconProject className="h-5 w-5 shrink-0 text-zinc-500" />
           <div className="min-w-0">
             <Link
               href={projectPath(project._id)}

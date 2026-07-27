@@ -12,31 +12,7 @@ import {
   saveRememberedLogin,
 } from "@/lib/remember-login";
 
-function FolderStackIcon({ className }: { className?: string }) {
-  return (
-    <svg
-      viewBox="0 0 32 32"
-      className={className}
-      fill="none"
-      aria-hidden
-    >
-      <path
-        d="M4 10a2 2 0 0 1 2-2h6.5l2 2H26a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V10Z"
-        fill="currentColor"
-        fillOpacity={0.15}
-        stroke="currentColor"
-        strokeWidth="1.5"
-      />
-      <path
-        d="M8 6a2 2 0 0 1 2-2h5l1.5 1.5H24a2 2 0 0 1 2 2v2H6V6Z"
-        fill="currentColor"
-        fillOpacity={0.25}
-        stroke="currentColor"
-        strokeWidth="1.5"
-      />
-    </svg>
-  );
-}
+import { IconAmsLogo } from "@/components/icons";
 
 export default function LoginPage() {
   const { user, loading, login } = useAuth();
@@ -84,7 +60,7 @@ export default function LoginPage() {
 
   if (loading) {
     return (
-      <div className="flex min-h-screen items-center justify-center bg-zinc-50 text-zinc-500">
+      <div className="flex min-h-screen items-center justify-center bg-background text-zinc-500">
         Loading…
       </div>
     );
@@ -108,7 +84,7 @@ export default function LoginPage() {
         <div className="relative flex h-full flex-col justify-end p-6 text-white lg:justify-between lg:p-10">
           <div className="hidden items-center gap-2.5 lg:flex">
             <span className="flex h-10 w-10 items-center justify-center rounded-lg bg-white/15 backdrop-blur-sm">
-              <FolderStackIcon className="h-6 w-6 text-emerald-100" />
+              <IconAmsLogo className="h-6 w-6 text-emerald-100" />
             </span>
             <span className="text-lg font-semibold tracking-tight">AMS</span>
           </div>
@@ -127,11 +103,16 @@ export default function LoginPage() {
         </div>
       </aside>
 
-      <main className="flex flex-1 flex-col justify-center bg-zinc-50 px-5 py-10 sm:px-8 lg:px-12 xl:px-16">
-        <div className="mx-auto w-full max-w-[400px]">
+      <main className="relative flex flex-1 flex-col justify-center overflow-hidden bg-background px-5 py-10 sm:px-8 lg:px-12 xl:px-16">
+        <div className="pointer-events-none absolute inset-0 bg-gradient-to-br from-background via-emerald-50/50 to-emerald-100/40" aria-hidden>
+          <div className="absolute -right-24 top-1/4 h-72 w-72 rounded-full bg-emerald-300/20 blur-3xl" />
+          <div className="absolute -left-16 bottom-1/4 h-64 w-64 rounded-full bg-emerald-400/15 blur-3xl" />
+        </div>
+
+        <div className="relative z-10 mx-auto w-full max-w-[440px]">
           <div className="mb-8 flex items-center gap-2.5 lg:hidden">
             <span className="flex h-9 w-9 items-center justify-center rounded-lg bg-emerald-700 text-white">
-              <FolderStackIcon className="h-5 w-5" />
+              <IconAmsLogo className="h-5 w-5" />
             </span>
             <span className="text-lg font-semibold text-zinc-900">AMS</span>
           </div>
@@ -139,14 +120,16 @@ export default function LoginPage() {
           <h1 className="text-2xl font-semibold tracking-tight text-zinc-900">
             Welcome back
           </h1>
-          <p className="mt-2 text-sm text-zinc-500">
+          <p className="mt-2 text-sm text-zinc-600">
             Sign in with your AMS account to open projects and assets.
           </p>
 
-          <form
-            onSubmit={onSubmit}
-            className="mt-8 space-y-5 rounded-2xl border border-zinc-200/80 bg-white p-6 shadow-sm sm:p-8"
-          >
+          <div className="relative mt-8">
+             
+            <form
+              onSubmit={onSubmit}
+              className="relative space-y-5 rounded-2xl border border-white/80 bg-white/90 p-6 shadow-sm backdrop-blur-sm sm:p-8"
+            >
             <div>
               <label
                 htmlFor="email"
@@ -207,9 +190,10 @@ export default function LoginPage() {
             >
               {submitting ? "Signing in…" : "Sign in"}
             </button>
-          </form>
+            </form>
+          </div>
 
-          <p className="mt-6 text-center text-xs text-zinc-400">
+          <p className="mt-6 text-center text-xs text-zinc-500">
             Asset Management System · Internal use
           </p>
         </div>
