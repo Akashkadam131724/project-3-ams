@@ -1,28 +1,20 @@
 "use client";
 
+import Image from "next/image";
 import { useEffect, useState } from "react";
 import { usePathname } from "next/navigation";
 import { AppSidebar } from "@/components/app-sidebar";
 import { AuthGate } from "@/components/auth-gate";
+import { IconMenu } from "@/components/icons";
 import { DashboardLayoutProvider, useDashboardLayout } from "@/contexts/dashboard-layout-context";
+import { layout } from "@/lib/layout";
 import {
   readSidebarCollapsed,
   writeSidebarCollapsed,
 } from "@/lib/sidebar-prefs";
 
 function MenuIcon({ className }: { className?: string }) {
-  return (
-    <svg
-      viewBox="0 0 24 24"
-      className={className}
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="2"
-      aria-hidden
-    >
-      <path d="M4 6h16M4 12h16M4 18h16" />
-    </svg>
-  );
+  return <IconMenu className={className} />;
 }
 
 function DashboardShellInner({ children }: { children: React.ReactNode }) {
@@ -76,11 +68,23 @@ function DashboardShellInner({ children }: { children: React.ReactNode }) {
         onToggleCollapse={toggleSidebarCollapsed}
       />
 
-      <div className="flex min-h-0 min-w-0 flex-1 flex-col">
-        <header className="flex shrink-0 items-center gap-3 border-b border-zinc-200 bg-white px-4 py-3 lg:hidden">
+      <div className="relative flex min-h-0 min-w-0 flex-1 flex-col">
+        <div className="pointer-events-none absolute inset-0 overflow-hidden" aria-hidden>
+          <Image
+            src="/login-hero.png"
+            alt=""
+            fill
+            className="object-cover object-center opacity-[0.85]"
+            sizes="(max-width: 1024px) 100vw, 75vw"
+            priority={false}
+          />
+          <div className="absolute inset-0 bg-gradient-to-br from-[#f0f5f2]/90 via-[#f0f5f2]/85 to-emerald-100/55" />
+        </div>
+
+        <header className="relative z-10 flex shrink-0 items-center gap-3 border-b border-emerald-200/50 bg-white/75 px-4 py-3 backdrop-blur-md lg:hidden">
           <button
             type="button"
-            className="rounded-md p-2 text-zinc-700 hover:bg-zinc-100"
+            className="rounded-md p-2 text-emerald-900 hover:bg-emerald-50"
             aria-expanded={mobileNavOpen}
             aria-controls="app-sidebar"
             onClick={() => setMobileNavOpen((open) => !open)}
@@ -94,14 +98,14 @@ function DashboardShellInner({ children }: { children: React.ReactNode }) {
         </header>
 
         <main
-          className={`flex min-h-0 min-w-0 flex-1 flex-col ${
+          className={`relative z-10 flex min-h-0 min-w-0 flex-1 flex-col ${
             scrollLocked ? "overflow-hidden" : "overflow-y-auto"
           }`}
         >
           <div
-            className={`mx-auto flex w-full min-w-0 max-w-5xl flex-1 flex-col ${
-              scrollLocked ? "h-full min-h-0" : ""
-            } ${scrollLocked ? "" : "p-4 sm:p-6 md:p-8"}`}
+            className={`${layout.pageInner} ${
+              scrollLocked ? "h-full min-h-0" : layout.page
+            }`}
           >
             {children}
           </div>

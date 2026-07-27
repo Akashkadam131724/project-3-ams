@@ -12,31 +12,7 @@ import {
   saveRememberedLogin,
 } from "@/lib/remember-login";
 
-function FolderStackIcon({ className }: { className?: string }) {
-  return (
-    <svg
-      viewBox="0 0 32 32"
-      className={className}
-      fill="none"
-      aria-hidden
-    >
-      <path
-        d="M4 10a2 2 0 0 1 2-2h6.5l2 2H26a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V10Z"
-        fill="currentColor"
-        fillOpacity={0.15}
-        stroke="currentColor"
-        strokeWidth="1.5"
-      />
-      <path
-        d="M8 6a2 2 0 0 1 2-2h5l1.5 1.5H24a2 2 0 0 1 2 2v2H6V6Z"
-        fill="currentColor"
-        fillOpacity={0.25}
-        stroke="currentColor"
-        strokeWidth="1.5"
-      />
-    </svg>
-  );
-}
+import { IconAmsLogo } from "@/components/icons";
 
 export default function LoginPage() {
   const { user, loading, login } = useAuth();
@@ -108,7 +84,7 @@ export default function LoginPage() {
         <div className="relative flex h-full flex-col justify-end p-6 text-white lg:justify-between lg:p-10">
           <div className="hidden items-center gap-2.5 lg:flex">
             <span className="flex h-10 w-10 items-center justify-center rounded-lg bg-white/15 backdrop-blur-sm">
-              <FolderStackIcon className="h-6 w-6 text-emerald-100" />
+              <IconAmsLogo className="h-6 w-6 text-emerald-100" />
             </span>
             <span className="text-lg font-semibold tracking-tight">AMS</span>
           </div>
@@ -131,7 +107,7 @@ export default function LoginPage() {
         <div className="mx-auto w-full max-w-[400px]">
           <div className="mb-8 flex items-center gap-2.5 lg:hidden">
             <span className="flex h-9 w-9 items-center justify-center rounded-lg bg-emerald-700 text-white">
-              <FolderStackIcon className="h-5 w-5" />
+              <IconAmsLogo className="h-5 w-5" />
             </span>
             <span className="text-lg font-semibold text-zinc-900">AMS</span>
           </div>

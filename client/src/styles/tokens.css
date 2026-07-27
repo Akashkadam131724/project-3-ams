@@ -1,0 +1,66 @@
+/**
+ * AMS design tokens — change spacing and layout here to affect the whole app.
+ */
+:root {
+  --ams-space-xs: 0.25rem;
+  --ams-space-sm: 0.5rem;
+  --ams-space-md: 1rem;
+  --ams-space-lg: 1.5rem;
+  --ams-space-xl: 2rem;
+
+  --ams-page-padding-x: var(--ams-space-md);
+  --ams-page-padding-y: var(--ams-space-md);
+  --ams-section-gap: var(--ams-space-lg);
+  --ams-stack-gap: var(--ams-space-md);
+  --ams-card-padding: var(--ams-space-lg);
+
+  --ams-content-max-width: 100%;
+  --ams-browser-max-width: 100%;
+}
+
+@media (min-width: 640px) {
+  :root {
+    --ams-page-padding-x: var(--ams-space-lg);
+    --ams-page-padding-y: var(--ams-space-lg);
+  }
+}
+
+@media (min-width: 768px) {
+  :root {
+    --ams-page-padding-x: var(--ams-space-xl);
+    --ams-page-padding-y: var(--ams-space-xl);
+  }
+}
+
+@layer components {
+  .ams-page {
+    padding: var(--ams-page-padding-y) var(--ams-page-padding-x);
+  }
+
+  .ams-page-inner {
+    width: 100%;
+    min-width: 0;
+    max-width: var(--ams-content-max-width);
+    margin-inline: auto;
+  }
+
+  .ams-browser-panel {
+    width: 100%;
+    max-width: var(--ams-browser-max-width);
+    margin-inline: auto;
+  }
+
+  .ams-stack-md {
+    display: flex;
+    flex-direction: column;
+    gap: var(--ams-stack-gap);
+  }
+
+  .ams-section-gap {
+    gap: var(--ams-section-gap);
+  }
+
+  .ams-card-pad {
+    padding: var(--ams-card-padding);
+  }
+}

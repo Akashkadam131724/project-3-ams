@@ -16,6 +16,9 @@ import {
   ResourceVirtualGridView,
   ResourceVirtualTableView,
 } from "@/components/resource-virtual-scroll";
+import { SearchField } from "@/components/ui/search-field";
+import { IconFolderPlus, IconUpload } from "@/components/icons";
+import { layout } from "@/lib/layout";
 import {
   defaultDirectionForField,
   readResourceSort,
@@ -28,39 +31,6 @@ import type { Resource, ResourceListPagination } from "@/lib/types";
 
 type ResourceTypeFilter = "all" | "folder" | "file";
 type Crumb = { id: string | null; name: string };
-
-function FolderPlusIcon({ className }: { className?: string }) {
-  return (
-    <svg
-      viewBox="0 0 24 24"
-      className={className}
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="2"
-      aria-hidden
-    >
-      <path d="M12 10v6M9 13h6" />
-      <path d="M20 20a2 2 0 0 0 2-2V8a2 2 0 0 0-2-2h-7.9a2 2 0 0 1-1.69-.9L9.6 3.9A2 2 0 0 0 7.93 3H4a2 2 0 0 0-2 2v13a2 2 0 0 0 2 2Z" />
-    </svg>
-  );
-}
-
-function UploadIcon({ className }: { className?: string }) {
-  return (
-    <svg
-      viewBox="0 0 24 24"
-      className={className}
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="2"
-      aria-hidden
-    >
-      <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
-      <polyline points="17 8 12 3 7 8" />
-      <line x1="12" x2="12" y1="3" y2="15" />
-    </svg>
-  );
-}
 
 async function buildBreadcrumbs(
   projectId: string,
@@ -418,7 +388,7 @@ export function ResourceBrowser({
               : "px-3 py-2 text-sm"
           }`}
         >
-          <FolderPlusIcon className="h-4 w-4 shrink-0" />
+          <IconFolderPlus className="h-4 w-4 shrink-0" />
           {compact ? "Folder" : "Create new folder"}
         </button>
         <label
@@ -428,7 +398,7 @@ export function ResourceBrowser({
               : "px-3 py-2 text-sm"
           }`}
         >
-          <UploadIcon className="h-4 w-4 shrink-0" />
+          <IconUpload className="h-4 w-4 shrink-0" />
           {compact ? "Upload" : "Upload file"}
           <input
             type="file"
@@ -465,27 +435,13 @@ export function ResourceBrowser({
           />
         </div>
 
-        <label className="relative block">
-          <span className="sr-only">Search files and folders</span>
-          <svg
-            className="pointer-events-none absolute left-2.5 top-1/2 h-3.5 w-3.5 -translate-y-1/2 text-zinc-400"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="2"
-            aria-hidden
-          >
-            <circle cx="11" cy="11" r="8" />
-            <path d="m21 21-4.3-4.3" />
-          </svg>
-          <input
-            type="search"
-            placeholder="Search"
-            value={search}
-            onChange={(e) => setSearch(e.target.value)}
-            className="w-full rounded-lg border border-zinc-300 bg-white py-1.5 pl-8 pr-2 text-sm outline-none focus:border-emerald-600 focus:ring-2 focus:ring-emerald-600/20"
-          />
-        </label>
+        <SearchField
+          compact
+          label="Search files and folders"
+          placeholder="Search"
+          value={search}
+          onChange={setSearch}
+        />
 
         <div className="flex items-center gap-2">
           <div className="flex min-w-0 flex-1 gap-1 overflow-x-auto">
@@ -506,7 +462,7 @@ export function ResourceBrowser({
       </div>
 
       {/* Desktop chrome — fixed within panel */}
-      <div className="mx-auto hidden w-full max-w-4xl shrink-0 space-y-4 px-4 pt-4 sm:px-6 sm:pt-6 lg:block">
+      <div className="mx-auto hidden w-full shrink-0 space-y-4 px-4 pt-4 sm:px-6 sm:pt-6 lg:block">
         <div className="flex flex-col gap-4 lg:flex-row lg:items-start lg:justify-between">
           <div className="min-w-0">
             <Link
@@ -534,27 +490,13 @@ export function ResourceBrowser({
             </div>
           </div>
           <div className="flex w-full min-w-0 flex-col gap-2 lg:w-auto lg:items-end">
-            <label className="relative block w-full min-w-0 lg:w-56">
-              <span className="sr-only">Search files and folders</span>
-              <svg
-                className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-zinc-400"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="2"
-                aria-hidden
-              >
-                <circle cx="11" cy="11" r="8" />
-                <path d="m21 21-4.3-4.3" />
-              </svg>
-              <input
-                type="search"
-                placeholder="Search in folder"
-                value={search}
-                onChange={(e) => setSearch(e.target.value)}
-                className="w-full rounded-full border border-zinc-300 bg-white py-2 pl-9 pr-3 text-sm outline-none focus:border-emerald-600 focus:ring-2 focus:ring-emerald-600/20"
-              />
-            </label>
+            <SearchField
+              className="w-full min-w-0 lg:w-56"
+              label="Search files and folders"
+              placeholder="Search in folder"
+              value={search}
+              onChange={setSearch}
+            />
             <ResourceViewToggle mode={viewMode} onChange={onViewModeChange} />
           </div>
         </div>
@@ -583,7 +525,7 @@ export function ResourceBrowser({
       </div>
 
       <div className="flex min-h-0 flex-1 flex-col overflow-hidden">
-        <div className="mx-auto flex w-full min-h-0 max-w-4xl flex-1 flex-col px-4 pb-4 pt-3 sm:px-6 lg:pt-4">
+        <div className={`${layout.browserPanel} flex min-h-0 flex-1 flex-col px-4 pb-4 pt-3 sm:px-6 lg:pt-4`}>
       {error && (
         <p className="shrink-0 rounded-md bg-red-50 px-3 py-2 text-sm text-red-800">
           {error}
