@@ -24,4 +24,4 @@ jobs:
 
             IMAGE_TAG=${{ github.event.inputs.image_tag }}
 
-            IMAGE_TAG=$IMAGE_TAG ./server/deploy-backend-docker.sh
+            IMAGE_TAG=$IMAGE_TAG ./deploy-backend-docker.sh
