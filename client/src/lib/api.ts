@@ -12,9 +12,7 @@ import type {
 } from "./types";
 
 const API_BASE =
-  process.env.NEXT_PUBLIC_API_URL?.replace(/\/$/, "") ||
-  "http://localhost:3004";
-
+  process.env.NEXT_PUBLIC_API_URL?.replace(/\/$/, "")  
 export class ApiError extends Error {
   status: number;
   errorType?: ApiErrorBody["errorType"];
