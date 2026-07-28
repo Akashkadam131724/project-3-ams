@@ -1,9 +1,13 @@
 name: Build Docker Image for Client
 
 on:
+  workflow_dispatch:
   push:
     branches:
       - main
+    paths:
+      - "client/**"
+      - ".github/workflows/build-client-img.yml"
 
 jobs:
   build:
