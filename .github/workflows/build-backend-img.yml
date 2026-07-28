@@ -1,9 +1,13 @@
 name: Build Docker Image for Backend
 
 on:
+  workflow_dispatch:
   push:
     branches:
       - main
+    paths:
+      - "server/**"
+      - ".github/workflows/build-backend-img.yml"
 
 jobs:
   build:
