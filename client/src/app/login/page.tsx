@@ -114,7 +114,7 @@ export default function LoginPage() {
             <span className="flex h-9 w-9 items-center justify-center rounded-lg bg-emerald-700 text-white">
               <IconAmsLogo className="h-5 w-5" />
             </span>
-            <span className="text-lg font-semibold text-zinc-900">AMS</span>
+            <span className="text-lg font-semibold text-zinc-900">AMS Team</span>
           </div>
 
           <h1 className="text-2xl font-semibold tracking-tight text-zinc-900">
